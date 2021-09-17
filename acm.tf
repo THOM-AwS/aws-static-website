@@ -1,4 +1,7 @@
-
+provider "aws" {
+  region = "us-east-1"
+  alias  = "aws_cloudfront"
+}
 
 data "aws_acm_certificate" "acm_cert" {
   count    = var.use_default_domain ? 0 : 1
