@@ -21,17 +21,6 @@ variable "versioning_status" {
   default     = false
 }
 
-variable "attach_bucket_policy" {
-  description = "Set if bucket should have bucket policy attached to it"
-  type        = bool
-}
-
-variable "bucket_name_prefix" {
-  description = "Create the bucket using a specified prefix for the name"
-  type        = string
-  default     = null
-}
-
 variable "logging" {
   description = "Access bucket logging configuration"
   type        = map(string)
