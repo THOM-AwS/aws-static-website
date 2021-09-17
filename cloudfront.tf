@@ -24,7 +24,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     prefix          = "cloudfront-logs"
   }
 
-  aliases = [var.domain_name]
+  aliases = [local.domain_name]
 
   default_cache_behavior {
     allowed_methods = [
@@ -62,7 +62,14 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   dynamic "viewer_certificate" {
-    for_each = var.acm_certs
+    for_each = local.default_certs
+    content {
+      cloudfront_default_certificate = true
+    }
+  }
+
+  dynamic "viewer_certificate" {
+    for_each = local.acm_certs
     content {
       acm_certificate_arn      = data.aws_acm_certificate.acm_cert[0].arn
       ssl_support_method       = "sni-only"

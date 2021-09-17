@@ -10,6 +10,16 @@ variable "create_logging_bucket" {
   default = true
 }
 
+variable "acm_certificate_domain" {
+  default     = null
+  description = "Domain of the ACM certificate"
+}
+
+variable "hosted_zone" {
+  default     = null
+  description = "Route53 hosted zone"
+}
+
 variable "versioning_status" {
   description = "Desired status for object versioning: True or False"
   type        = bool
@@ -57,16 +67,14 @@ variable "restrict_public_buckets" {
   default     = true
 }
 
-variable "acm_certs" {
-  description = "the certificate"
-  type        = string
-  default     = null
+variable "price_class" {
+  default     = "PriceClass_100" // Only US,Canada,Europe
+  description = "CloudFront distribution price class"
 }
 
-variable "price_class" {
-  description = "price class"
-  type        = string
-  default     = null
+variable "use_default_domain" {
+  default     = false
+  description = "Use CloudFront website address without Route53 and ACM certificate"
 }
 
 locals {
