@@ -57,11 +57,23 @@ variable "restrict_public_buckets" {
   default     = true
 }
 
+variable "acm_certs" {
+  description = "the certificate"
+  type        = string
+  default     = null
+}
+
+variable "price_class" {
+  description = "price class"
+  type        = string
+  default     = null
+}
+
 locals {
   tags = merge(
     var.tags,
     {
-      Name        = var.bucket_name
+      Name        = var.domain_name
       Environment = var.environment
     },
   )

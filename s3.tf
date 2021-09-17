@@ -40,7 +40,7 @@ resource "aws_s3_bucket_policy" "cloudfrontpolicy" {
         Sid    = "AllowCloudfrontOAI"
         Effect = "Allow"
         "Principal" : {
-          "AWS" : aws_cloudfront_origin_access_identity.origin_access_identity.arn
+          "AWS" : data.aws_cloudfront_origin_access_identity.origin_access_identity.arn
         }
         Action = "s3:GetObject"
         Resource = [

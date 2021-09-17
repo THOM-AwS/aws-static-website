@@ -20,7 +20,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   logging_config {
     include_cookies = false
-    bucket          = "${lower(join(",", [var.bucket_name, "-logging"]))}.s3.amazonaws.com"
+    bucket          = "${lower(join(",", [var.domain_name, "-logging"]))}.s3.amazonaws.com"
     prefix          = "cloudfront-logs"
   }
 
@@ -60,15 +60,9 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       restriction_type = "none"
     }
   }
-  dynamic "viewer_certificate" {
-    for_each = local.default_certs
-    content {
-      cloudfront_default_certificate = true
-    }
-  }
 
   dynamic "viewer_certificate" {
-    for_each = local.acm_certs
+    for_each = var.acm_certs
     content {
       acm_certificate_arn      = data.aws_acm_certificate.acm_cert[0].arn
       ssl_support_method       = "sni-only"
