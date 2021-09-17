@@ -63,7 +63,7 @@ resource "aws_s3_bucket_public_access_block" "public_access" {
 
 resource "aws_s3_bucket" "log_bucket" {
   count  = var.create_logging_bucket ? 1 : 0
-  bucket = lower(join(",", [var.domain_name, "-logging"]))
+  bucket = lower("${var.domain_name}-logging")
   acl    = "log-delivery-write"
   # server_side_encryption_configuration {
   #   rule {
