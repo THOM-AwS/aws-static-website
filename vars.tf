@@ -68,7 +68,7 @@ variable "restrict_public_buckets" {
 }
 
 variable "price_class" {
-  default     = "PriceClass_100" // Only US,Canada,Europe
+  default     = "PriceClass_all"
   description = "CloudFront distribution price class"
 }
 
