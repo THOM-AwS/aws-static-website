@@ -1,7 +1,8 @@
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
   depends_on = [
-    aws_s3_bucket.www
+    aws_s3_bucket.www,
+    aws_s3_bucket.log_bucket
   ]
 
   origin {
@@ -20,7 +21,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   logging_config {
     include_cookies = false
-    bucket          = "${lower(join(",", [var.domain_name, "-logging"]))}.s3.amazonaws.com"
+    bucket          = "${lower("${var.domain_name}-logging")}.s3.amazonaws.com"
     prefix          = "cloudfront-logs"
   }
 
