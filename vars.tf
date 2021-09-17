@@ -68,7 +68,7 @@ variable "restrict_public_buckets" {
 }
 
 variable "price_class" {
-  default     = "PriceClass_all"
+  default     = "PriceClass_All"
   description = "CloudFront distribution price class"
 }
 

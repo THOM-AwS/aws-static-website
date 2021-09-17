@@ -20,7 +20,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   default_root_object = "index.html"
 
   logging_config {
-    include_cookies = false
+    include_cookies = true
     bucket          = "${lower("${var.domain_name}-logging")}.s3.amazonaws.com"
     prefix          = "cloudfront-logs"
   }
@@ -28,6 +28,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   aliases = local.domain_name
 
   default_cache_behavior {
+    cache_policy_id = "658327ea-f89d-4fab-a63d-7e88639e58f6"
     allowed_methods = [
       "GET",
       "HEAD",
@@ -49,9 +50,6 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     }
 
     viewer_protocol_policy = "redirect-to-https"
-    min_ttl                = 0
-    default_ttl            = 86400
-    max_ttl                = 31536000
   }
 
   price_class = var.price_class
@@ -82,7 +80,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     error_code            = 403
     response_code         = 200
     error_caching_min_ttl = 0
-    response_page_path    = "/"
+    response_page_path    = "/index.html"
   }
 
   wait_for_deployment = false
