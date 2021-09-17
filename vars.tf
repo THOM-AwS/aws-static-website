@@ -1,7 +1,18 @@
+variable "domain_name" {
+  description = "The domain name without its schema, ie www."
+  type = string
+  default = "hamer.cloud"
+}
+
 variable "bucket_name" {
   description = "Desired name for s3 backend state bucket"
   type        = string
-  default     = null
+}
+
+variable "create_logging_bucket" {
+  description = "Do you want to create a nother bucket for logging"
+  type = bool
+  default = true
 }
 
 variable "versioning_status" {
@@ -13,7 +24,6 @@ variable "versioning_status" {
 variable "attach_bucket_policy" {
   description = "Set if bucket should have bucket policy attached to it"
   type        = bool
-  default     = false
 }
 
 variable "bucket_name_prefix" {

@@ -23,14 +23,6 @@ resource "aws_s3_bucket" "www" {
       target_prefix = lookup(logging.value, "target_prefix")
     }
   }
-  dynamic "bucket_policy" {
-    for_each = length(keys(var.attach_bucket_policy)) == 0 ? [] : [var.policy_document]
-
-    content {
-      target_bucket = logging.value.target_bucket
-      target_prefix = lookup(logging.value, "target_prefix")
-    }
-  }
   versioning {
     enabled = var.versioning_status
   }
@@ -48,7 +40,7 @@ resource "aws_s3_bucket_policy" "cloudfrontpolicy" {
         Sid    = "AllowCloudfrontOAI"
         Effect = "Allow"
         "Principal" : {
-          "AWS" : "${aws_cloudfront_origin_access_identity.origin_access_identity.arn}"
+          "AWS" : aws_cloudfront_origin_access_identity.origin_access_identity.arn
         }
         Action = "s3:GetObject"
         Resource = [
