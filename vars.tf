@@ -4,11 +4,6 @@ variable "domain_name" {
   default = "hamer.cloud"
 }
 
-variable "bucket_name" {
-  description = "Desired name for s3 backend state bucket"
-  type        = string
-}
-
 variable "create_logging_bucket" {
   description = "Do you want to create a nother bucket for logging"
   type = bool
