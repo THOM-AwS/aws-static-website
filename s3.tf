@@ -1,11 +1,11 @@
 resource "aws_s3_bucket" "root" {
-  bucket = lower(var.bucket_name)
+  bucket = lower(var.domain_name)
   acl    = "private"
   tags   = var.tags
 }
 
 resource "aws_s3_bucket" "www" {
-  bucket = lower(join(",", ["www.", var.bucket_name]))
+  bucket = lower(join(",", ["www.", var.domain_name]))
   acl    = "private"
   # server_side_encryption_configuration {
   #   rule {
@@ -63,7 +63,7 @@ resource "aws_s3_bucket_public_access_block" "public_access" {
 
 resource "aws_s3_bucket" "log_bucket" {
   count  = var.create_logging_bucket ? 1 : 0
-  bucket = lower(join(",", [var.bucket_name, "-logging"]))
+  bucket = lower(join(",", [var.domain_name, "-logging"]))
   acl    = "log-delivery-write"
   # server_side_encryption_configuration {
   #   rule {
