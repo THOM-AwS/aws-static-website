@@ -5,7 +5,7 @@ resource "aws_s3_bucket" "root" {
 }
 
 resource "aws_s3_bucket" "www" {
-  bucket = lower(join(",", ["www.", var.domain_name]))
+  bucket = lower("www.${var.domain_name}")
   acl    = "private"
   # server_side_encryption_configuration {
   #   rule {
