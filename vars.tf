@@ -51,7 +51,7 @@ variable "tags" {
 variable "block_public_acls" {
   description = "Desired setting to block public ACL's"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "block_public_policy" {
