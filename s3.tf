@@ -2,11 +2,13 @@ resource "aws_s3_bucket" "root" {
   bucket = lower(var.domain_name)
   acl    = "private"
   tags   = var.tags
+  force_destroy = true
 }
 
 resource "aws_s3_bucket" "www" {
   bucket = lower("www.${var.domain_name}")
   acl    = "private"
+  force_destroy = true
   # server_side_encryption_configuration {
   #   rule {
   #     apply_server_side_encryption_by_default {
@@ -83,6 +85,7 @@ resource "aws_s3_bucket" "log_bucket" {
   count  = var.create_logging_bucket ? 1 : 0
   bucket = lower("${var.domain_name}-logging")
   acl    = "log-delivery-write"
+  force_destroy = true
   # server_side_encryption_configuration {
   #   rule {
   #     apply_server_side_encryption_by_default {
