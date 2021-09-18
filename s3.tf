@@ -60,7 +60,7 @@ resource "aws_s3_bucket_policy" "cloudfrontpolicy" {
             "Sid": "allow account access",
             "Effect": "Allow",
             "Principal": {
-                "AWS": var.user_arn
+                "AWS": aws_iam_user.website-user.arn
             },
             "Action": [
                 "s3:PutObject",
