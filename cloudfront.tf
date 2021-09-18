@@ -43,6 +43,11 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     origin_request_policy_id = data.aws_cloudfront_origin_request_policy.this.id
     cache_policy_id          = data.aws_cloudfront_cache_policy.this.id
     target_origin_id = "www.${var.domain_name}-origin"
+    
+    function_association {
+      event_type   = "origin-response"
+      function_arn = aws_lambda_function.cloudfront_lambda.arn
+    }
 
     viewer_protocol_policy = "redirect-to-https"
   }
