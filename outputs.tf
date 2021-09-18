@@ -22,3 +22,8 @@ output "user_secret_access_key" {
   description = "User Name"
   value       = aws_iam_access_key.website-user.secret
 }
+
+output "cloudfront_distribution_id" {
+  description = "ID of the Cloudfront Distribution for use with invalidations where needed, ie git actions"
+  value       = aws_cloudfront_distribution.s3_distribution.id
+}
