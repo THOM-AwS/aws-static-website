@@ -41,7 +41,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       "HEAD",
     ]
 
-    target_origin_id = "${var.domain_name}-origin"
+    target_origin_id = var.domain_name
 
     forwarded_values {
       query_string = false
