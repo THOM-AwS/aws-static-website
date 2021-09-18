@@ -9,16 +9,17 @@ resource "aws_iam_access_key" "website-user" {
   user = aws_iam_user.website-user.name
 }
 
+data "aws_caller_identity" "current" {}
+
 resource "aws_iam_user_policy" "website-user" {
-  name = "website-${var.domain_name}-user"
+  name = "website-${replace(var.domain_name, ".", "-")}-user"
   user = aws_iam_user.website-user.name
-  tags = var.tags
   policy = <<EOF
 {
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "website-${var.domain_name}-upload",
+            "Sid": "WebsiteUpload",
             "Effect": "Allow",
             "Action": [
                 "s3:PutObject",
@@ -35,13 +36,13 @@ resource "aws_iam_user_policy" "website-user" {
             ]
         },
         {
-            "Sid": "cloudfront-${var.domain_name}-invalidation",
+            "Sid": "CloudfrontInvalidation",
             "Effect": "Allow",
             "Action": [
                 "cloudfront:CreateInvalidation"
             ],
             "Resource": [
-                "${aws_cloudfront_distribution.s3_distribution.arn}"
+                "arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/${aws_cloudfront_distribution.s3_distribution.id}"
             ]
         }
     ]
