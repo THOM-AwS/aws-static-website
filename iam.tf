@@ -2,9 +2,7 @@ resource "aws_iam_user" "website-user" {
   name = "website-${var.domain_name}-user"
   path = "/website-users/"
   force_destroy = true
-  tags = {
-    Stack = var.domain_name
-  }
+  tags = var.tags
 }
 
 resource "aws_iam_access_key" "website-user" {
@@ -14,7 +12,7 @@ resource "aws_iam_access_key" "website-user" {
 resource "aws_iam_user_policy" "website-user" {
   name = "website-${var.domain_name}-user"
   user = aws_iam_user.website-user.name
-
+  tags = var.tags
   policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -43,7 +41,7 @@ resource "aws_iam_user_policy" "website-user" {
                 "cloudfront:CreateInvalidation"
             ],
             "Resource": [
-                ${data.aws_cloudfront_origin_access_identity.origin_access_identity.arn}
+                "${aws_cloudfront_distribution.s3_distribution.arn}"
             ]
         }
     ]
