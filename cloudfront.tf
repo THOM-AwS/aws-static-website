@@ -25,7 +25,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     prefix          = "cloudfront-logs"
   }
 
-  aliases = [local.domain_name, "www.${local.domain_name}"]
+  aliases = "www.${local.domain_name}"
 
   default_cache_behavior {
     allowed_methods = [
