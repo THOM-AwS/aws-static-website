@@ -15,6 +15,11 @@ variable "acm_certificate_domain" {
   description = "Domain of the ACM certificate"
 }
 
+variable "user_arn" {
+  default     = null
+  description = "ARN of the user that will update the bucket"
+}
+
 variable "hosted_zone" {
   default     = null
   description = "Route53 hosted zone"

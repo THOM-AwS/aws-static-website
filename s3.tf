@@ -48,6 +48,24 @@ resource "aws_s3_bucket_policy" "cloudfrontpolicy" {
           "${aws_s3_bucket.www.arn}/*",
         ]
       },
+      {
+            "Sid": "allow account access",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": var.user_arn
+            },
+            "Action": [
+                "s3:PutObject",
+                "s3:PutObjectAcl",
+                "s3:GetObject",
+                "s3:GetObjectAcl",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::www.${domain_name}/*",
+                "arn:aws:s3:::www.${domain_name}"
+            ]
+        }
     ]
   })
 }
