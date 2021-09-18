@@ -43,7 +43,7 @@ resource "aws_iam_user_policy" "website-user" {
                 "cloudfront:CreateInvalidation"
             ],
             "Resource": [
-                ${aws_cloudfront_origin_access_identity.origin_access_identity.iam_arn}
+                ${data.aws_cloudfront_origin_access_identity.origin_access_identity.arn}
             ]
         }
     ]
