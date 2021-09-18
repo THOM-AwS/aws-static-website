@@ -3,12 +3,18 @@ resource "aws_s3_bucket" "root" {
   acl    = "private"
   tags   = var.tags
   force_destroy = true
+  lifecycle {
+    prevent_destroy = false
+  }
 }
 
 resource "aws_s3_bucket" "www" {
   bucket = lower("www.${var.domain_name}")
   acl    = "private"
   force_destroy = true
+  lifecycle {
+    prevent_destroy = false
+  }
   # server_side_encryption_configuration {
   #   rule {
   #     apply_server_side_encryption_by_default {
@@ -86,6 +92,10 @@ resource "aws_s3_bucket" "log_bucket" {
   bucket = lower("${var.domain_name}-logging")
   acl    = "log-delivery-write"
   force_destroy = true
+  lifecycle {
+    prevent_destroy = false
+  }
+
   # server_side_encryption_configuration {
   #   rule {
   #     apply_server_side_encryption_by_default {
