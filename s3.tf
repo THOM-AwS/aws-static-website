@@ -64,8 +64,8 @@ resource "aws_s3_bucket_policy" "cloudfrontpolicy" {
                 "s3:DeleteObject"
             ],
             "Resource": [
-                "arn:aws:s3:::www.${domain_name}/*",
-                "arn:aws:s3:::www.${domain_name}"
+                "arn:aws:s3:::www.${var.domain_name}/*",
+                "arn:aws:s3:::www.${var.domain_name}"
             ]
         }
     ]
