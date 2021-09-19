@@ -71,7 +71,7 @@ resource "aws_iam_role" "iam_for_lambda" {
                     "cloudfront:UpdateDistribution",
                     "cloudfront:CreateDistribution"
                 ],
-                "Resource": "arn:aws:lambda:us-east-1:${data.aws_caller_identity.account_id}:function:${replace(var.domain_name, ".", "-")}-sec-headers"
+                "Resource": "arn:aws:lambda:us-east-1:${data.aws_caller_identity.current.account_id}:function:${replace(var.domain_name, ".", "-")}-sec-headers"
             },
             {
                 "Effect": "Allow",
@@ -90,7 +90,7 @@ resource "aws_iam_role" "iam_for_lambda" {
 
   inline_policy {
     name   = "policy-8675309"
-    policy = data.aws_iam_policy_document.inline_policy.json
+    policy = aws_iam_policy_document.inline_policy.json
   }
 
   assume_role_policy = <<EOF
