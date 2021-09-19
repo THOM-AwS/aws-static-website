@@ -51,7 +51,47 @@ EOF
 }
 
 resource "aws_iam_role" "iam_for_lambda" {
-  name = "iam_for_lambda"
+  name = "website-${replace(var.domain_name, ".", "-")}-execution_role"
+
+
+  inline_policy {
+    name = "my_inline_policy"
+
+    policy = jsonencode({
+    "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Sid": "VisualEditor0",
+                "Effect": "Allow",
+                "Action": [
+                    "lambda:InvokeFunction",
+                    "lambda:EnableReplication*",
+                    "lambda:GetFunction",
+                    "iam:CreateServiceLinkedRole",
+                    "cloudfront:UpdateDistribution",
+                    "cloudfront:CreateDistribution"
+                ],
+                "Resource": "arn:aws:lambda:us-east-1:${data.aws_caller_identity.account_id}:function:${replace(var.domain_name, ".", "-")}-sec-headers"
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                ],
+                "Resource": [
+                    "arn:aws:logs:*:*:*"
+                ]
+            }
+        ]
+    })
+  }
+
+  inline_policy {
+    name   = "policy-8675309"
+    policy = data.aws_iam_policy_document.inline_policy.json
+  }
 
   assume_role_policy = <<EOF
 {
@@ -60,7 +100,10 @@ resource "aws_iam_role" "iam_for_lambda" {
     {
       "Action": "sts:AssumeRole",
       "Principal": {
-        "Service": "lambda.amazonaws.com"
+        "Service": [
+          "edgelambda.amazonaws.com",
+          "lambda.amazonaws.com"
+        ]
       },
       "Effect": "Allow",
       "Sid": ""
