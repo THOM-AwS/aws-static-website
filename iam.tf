@@ -50,58 +50,60 @@ resource "aws_iam_user_policy" "website-user" {
 EOF
 }
 
-resource "aws_iam_role" "iam_for_lambda" {
-  name = "website-${replace(var.domain_name, ".", "-")}-execution_role"
-  force_detach_policies = true
 
-  inline_policy {
-    name = "${replace(var.domain_name, ".", "-")}-policy"
+# NO EASY WAY TO ADD THIS LAMBDA TO THE CF DISTRIBUTION AT THIS POINT. COMMENTING OUT UNTIL ITS EASIER. 
+# resource "aws_iam_role" "iam_for_lambda" {
+#   name = "website-${replace(var.domain_name, ".", "-")}-execution_role"
+#   force_detach_policies = true
 
-    policy = jsonencode({
-      "Version" : "2012-10-17",
-      "Statement" : [
-        {
-          "Sid" : "VisualEditor0",
-          "Effect" : "Allow",
-          "Action" : [
-            "lambda:InvokeFunction",
-            "lambda:EnableReplication*",
-            "lambda:GetFunction",
-            "iam:CreateServiceLinkedRole",
-            "cloudfront:UpdateDistribution",
-            "cloudfront:CreateDistribution"
-          ],
-          "Resource" : "arn:aws:lambda:us-east-1:${data.aws_caller_identity.current.account_id}:function:${replace(var.domain_name, ".", "-")}-sec-headers"
-        },
-        {
-          "Effect" : "Allow",
-          "Action" : [
-            "logs:CreateLogGroup",
-            "logs:CreateLogStream",
-            "logs:PutLogEvents"
-          ],
-          "Resource" : [
-            "arn:aws:logs:*:*:*"
-          ]
-        }
-      ]
-    })
-  }
+#   inline_policy {
+#     name = "${replace(var.domain_name, ".", "-")}-policy"
 
-  assume_role_policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Action" : "sts:AssumeRole",
-        "Principal" : {
-          "Service" : [
-            "edgelambda.amazonaws.com",
-            "lambda.amazonaws.com"
-          ]
-        },
-        "Effect" : "Allow",
-        "Sid" : ""
-      }
-    ]
-  })
-}
+#     policy = jsonencode({
+#       "Version" : "2012-10-17",
+#       "Statement" : [
+#         {
+#           "Sid" : "VisualEditor0",
+#           "Effect" : "Allow",
+#           "Action" : [
+#             "lambda:InvokeFunction",
+#             "lambda:EnableReplication*",
+#             "lambda:GetFunction",
+#             "iam:CreateServiceLinkedRole",
+#             "cloudfront:UpdateDistribution",
+#             "cloudfront:CreateDistribution"
+#           ],
+#           "Resource" : "arn:aws:lambda:us-east-1:${data.aws_caller_identity.current.account_id}:function:${replace(var.domain_name, ".", "-")}-sec-headers"
+#         },
+#         {
+#           "Effect" : "Allow",
+#           "Action" : [
+#             "logs:CreateLogGroup",
+#             "logs:CreateLogStream",
+#             "logs:PutLogEvents"
+#           ],
+#           "Resource" : [
+#             "arn:aws:logs:*:*:*"
+#           ]
+#         }
+#       ]
+#     })
+#   }
+
+#   assume_role_policy = jsonencode({
+#     "Version" : "2012-10-17",
+#     "Statement" : [
+#       {
+#         "Action" : "sts:AssumeRole",
+#         "Principal" : {
+#           "Service" : [
+#             "edgelambda.amazonaws.com",
+#             "lambda.amazonaws.com"
+#           ]
+#         },
+#         "Effect" : "Allow",
+#         "Sid" : ""
+#       }
+#     ]
+#   })
+# }
