@@ -1,7 +1,7 @@
 variable "domain_name" {
   description = "The domain name without its schema, ie www."
   type        = string
-  default     = "hamer.cloud"
+  default     = null
 }
 
 variable "create_logging_bucket" {
