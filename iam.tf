@@ -52,10 +52,10 @@ EOF
 
 resource "aws_iam_role" "iam_for_lambda" {
   name = "website-${replace(var.domain_name, ".", "-")}-execution_role"
-
+  force_detach_policies = true
 
   inline_policy {
-    name = "my_inline_policy"
+    name = "${replace(var.domain_name, ".", "-")}-policy"
 
     policy = jsonencode({
       "Version" : "2012-10-17",
@@ -88,11 +88,6 @@ resource "aws_iam_role" "iam_for_lambda" {
     })
   }
 
-  inline_policy {
-    name   = "policy-8675309"
-    policy = aws_iam_policy_document.inline_policy.json
-  }
-
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
@@ -109,8 +104,4 @@ resource "aws_iam_role" "iam_for_lambda" {
       }
     ]
   })
-}
-
-data "aws_iam_policy_document" "inline_policy" {
-
 }
