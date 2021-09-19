@@ -1,8 +1,8 @@
 resource "aws_iam_user" "website-user" {
-  name = "website-${replace(var.domain_name, ".", "-")}-user"
-  path = "/website-users/"
+  name          = "website-${replace(var.domain_name, ".", "-")}-user"
+  path          = "/website-users/"
   force_destroy = true
-  tags = var.tags
+  tags          = var.tags
 }
 
 resource "aws_iam_access_key" "website-user" {
@@ -12,8 +12,8 @@ resource "aws_iam_access_key" "website-user" {
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_user_policy" "website-user" {
-  name = "website-${replace(var.domain_name, ".", "-")}-user"
-  user = aws_iam_user.website-user.name
+  name   = "website-${replace(var.domain_name, ".", "-")}-user"
+  user   = aws_iam_user.website-user.name
   policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -58,33 +58,33 @@ resource "aws_iam_role" "iam_for_lambda" {
     name = "my_inline_policy"
 
     policy = jsonencode({
-    "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Sid": "VisualEditor0",
-                "Effect": "Allow",
-                "Action": [
-                    "lambda:InvokeFunction",
-                    "lambda:EnableReplication*",
-                    "lambda:GetFunction",
-                    "iam:CreateServiceLinkedRole",
-                    "cloudfront:UpdateDistribution",
-                    "cloudfront:CreateDistribution"
-                ],
-                "Resource": "arn:aws:lambda:us-east-1:${data.aws_caller_identity.current.account_id}:function:${replace(var.domain_name, ".", "-")}-sec-headers"
-            },
-            {
-                "Effect": "Allow",
-                "Action": [
-                    "logs:CreateLogGroup",
-                    "logs:CreateLogStream",
-                    "logs:PutLogEvents"
-                ],
-                "Resource": [
-                    "arn:aws:logs:*:*:*"
-                ]
-            }
-        ]
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Sid" : "VisualEditor0",
+          "Effect" : "Allow",
+          "Action" : [
+            "lambda:InvokeFunction",
+            "lambda:EnableReplication*",
+            "lambda:GetFunction",
+            "iam:CreateServiceLinkedRole",
+            "cloudfront:UpdateDistribution",
+            "cloudfront:CreateDistribution"
+          ],
+          "Resource" : "arn:aws:lambda:us-east-1:${data.aws_caller_identity.current.account_id}:function:${replace(var.domain_name, ".", "-")}-sec-headers"
+        },
+        {
+          "Effect" : "Allow",
+          "Action" : [
+            "logs:CreateLogGroup",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents"
+          ],
+          "Resource" : [
+            "arn:aws:logs:*:*:*"
+          ]
+        }
+      ]
     })
   }
 
@@ -93,22 +93,24 @@ resource "aws_iam_role" "iam_for_lambda" {
     policy = aws_iam_policy_document.inline_policy.json
   }
 
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": [
-          "edgelambda.amazonaws.com",
-          "lambda.amazonaws.com"
-        ]
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
+  assume_role_policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Action" : "sts:AssumeRole",
+        "Principal" : {
+          "Service" : [
+            "edgelambda.amazonaws.com",
+            "lambda.amazonaws.com"
+          ]
+        },
+        "Effect" : "Allow",
+        "Sid" : ""
+      }
+    ]
+  })
 }
-EOF
+
+data "aws_iam_policy_document" "inline_policy" {
+
 }

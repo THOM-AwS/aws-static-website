@@ -16,7 +16,7 @@ resource "aws_lambda_function" "cloudfront_lambda" {
   }
 
   runtime = "python3.8"
-  tags = var.tags
+  tags    = var.tags
 
 }
 

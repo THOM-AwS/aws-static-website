@@ -1,7 +1,7 @@
 resource "aws_s3_bucket" "root" {
-  bucket = lower(var.domain_name)
-  acl    = "private"
-  tags   = var.tags
+  bucket        = lower(var.domain_name)
+  acl           = "private"
+  tags          = var.tags
   force_destroy = true
   lifecycle {
     prevent_destroy = false
@@ -9,8 +9,8 @@ resource "aws_s3_bucket" "root" {
 }
 
 resource "aws_s3_bucket" "www" {
-  bucket = lower("www.${var.domain_name}")
-  acl    = "private"
+  bucket        = lower("www.${var.domain_name}")
+  acl           = "private"
   force_destroy = true
   lifecycle {
     prevent_destroy = false
@@ -57,23 +57,23 @@ resource "aws_s3_bucket_policy" "cloudfrontpolicy" {
         ]
       },
       {
-            "Sid": "allow account access",
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": aws_iam_user.website-user.arn
-            },
-            "Action": [
-                "s3:PutObject",
-                "s3:PutObjectAcl",
-                "s3:GetObject",
-                "s3:GetObjectAcl",
-                "s3:DeleteObject"
-            ],
-            "Resource": [
-                "arn:aws:s3:::www.${var.domain_name}/*",
-                "arn:aws:s3:::www.${var.domain_name}"
-            ]
-        }
+        "Sid" : "allow account access",
+        "Effect" : "Allow",
+        "Principal" : {
+          "AWS" : aws_iam_user.website-user.arn
+        },
+        "Action" : [
+          "s3:PutObject",
+          "s3:PutObjectAcl",
+          "s3:GetObject",
+          "s3:GetObjectAcl",
+          "s3:DeleteObject"
+        ],
+        "Resource" : [
+          "arn:aws:s3:::www.${var.domain_name}/*",
+          "arn:aws:s3:::www.${var.domain_name}"
+        ]
+      }
     ]
   })
 }
@@ -88,9 +88,9 @@ resource "aws_s3_bucket_public_access_block" "public_access" {
 }
 
 resource "aws_s3_bucket" "log_bucket" {
-  count  = var.create_logging_bucket ? 1 : 0
-  bucket = lower("${var.domain_name}-logging")
-  acl    = "log-delivery-write"
+  count         = var.create_logging_bucket ? 1 : 0
+  bucket        = lower("${var.domain_name}-logging")
+  acl           = "log-delivery-write"
   force_destroy = true
   lifecycle {
     prevent_destroy = false

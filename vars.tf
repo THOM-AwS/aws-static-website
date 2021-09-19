@@ -1,13 +1,13 @@
 variable "domain_name" {
   description = "The domain name without its schema, ie www."
-  type = string
-  default = "hamer.cloud"
+  type        = string
+  default     = "hamer.cloud"
 }
 
 variable "create_logging_bucket" {
   description = "Do you want to create a nother bucket for logging"
-  type = bool
-  default = true
+  type        = bool
+  default     = true
 }
 
 variable "acm_certificate_domain" {
