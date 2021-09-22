@@ -86,3 +86,8 @@ locals {
     },
   )
 }
+
+variable "use_sec_headers" {
+  default = true
+  description = "Set to false to not create a lambda function, and automatically associate to the cloudfront response lambda at edge."
+}
