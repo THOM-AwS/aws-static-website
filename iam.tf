@@ -52,7 +52,6 @@ EOF
 
 
 resource "aws_iam_role" "iam_for_lambda" {
-  count = var.use_sec_headers ? 1 : 0
   name = "website-${replace(var.domain_name, ".", "-")}-execution_role"
   force_detach_policies = true
 

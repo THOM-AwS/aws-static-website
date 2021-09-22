@@ -1,8 +1,6 @@
 import json
 import os
 
-DOMAIN_NAME = os.getenv('DOMAIN_NAME')
-
 STATIC_HEADERS_TO_ADD = {
     'x-frame-options': [{
         'key':'X-Frame-Options',
@@ -10,7 +8,7 @@ STATIC_HEADERS_TO_ADD = {
         }],
     'content-security-policy': [{
         'key': 'Content-Security-Policy', 
-        'value': "default-src https://{DOMAIN_NAME} https://www.{DOMAIN_NAME}; base-uri https://{DOMAIN_NAME} https://www.{DOMAIN_NAME}; img-src * 'self' data: https: 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://{DOMAIN_NAME} https://www.{DOMAIN_NAME} fonts.googleapis.com data:; font-src 'self' 'unsafe-inline' fonts.gstatic.com fonts.googleapis.com ; frame-src youtube.com www.youtube.com; object-src 'none'"
+        'value': "default-src self; base-uri self; img-src * 'self' data: https: 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' self fonts.googleapis.com data:; font-src 'self' 'unsafe-inline' fonts.gstatic.com fonts.googleapis.com ; frame-src youtube.com www.youtube.com; object-src 'none'"
         }],
     'strict-transport-security': [{
         'key': 'Strict-Transport-Security', 

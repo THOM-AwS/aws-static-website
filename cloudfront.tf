@@ -37,7 +37,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       content {
         event_type   = "origin-response"
         include_body = false
-        lambda_function_association = "${aws_lambda_function.cloudfront_lambda.arn}:1"
+        lambda_arn = aws_lambda_function.cloudfront_lambda.qualified_arn
       }
     }
 

@@ -14,12 +14,12 @@ output "user_details" {
 }
 
 output "user_acces_key" {
-  description = "User Name"
+  description = "User ID"
   value       = aws_iam_access_key.website-user.id
 }
 
 output "user_secret_access_key" {
-  description = "User Name"
+  description = "Secret Access Key"
   value       = aws_iam_access_key.website-user.secret
 }
 
