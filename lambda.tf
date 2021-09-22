@@ -4,7 +4,7 @@ resource "aws_lambda_function" "cloudfront_lambda" {
   function_name = "${replace(var.domain_name, ".", "-")}-sec-headers"
   role          =  aws_iam_role.iam_for_lambda.arn
   description   = "This lambda will add in security headers for origin responses."
-  handler       = "lambda_function.lambda_handler"
+  handler       = "lambda_handler"
   publish       = true
 
   # The filebase64sha256() function is available in Terraform 0.11.12 and later
