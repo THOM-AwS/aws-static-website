@@ -62,7 +62,7 @@ resource "aws_iam_role" "iam_for_lambda" {
       "Version" : "2012-10-17",
       "Statement" : [
         {
-          "Sid" : "VisualEditor0",
+          "Sid" : "PolicyPermissions",
           "Effect" : "Allow",
           "Action" : [
             "lambda:InvokeFunction",
@@ -93,6 +93,8 @@ resource "aws_iam_role" "iam_for_lambda" {
     "Version" : "2012-10-17",
     "Statement" : [
       {
+        "Effect" : "Allow",
+        "Sid" : "TrustPolicy"
         "Action" : "sts:AssumeRole",
         "Principal" : {
           "Service" : [
@@ -100,8 +102,6 @@ resource "aws_iam_role" "iam_for_lambda" {
             "lambda.amazonaws.com"
           ]
         },
-        "Effect" : "Allow",
-        "Sid" : ""
       }
     ]
   })
