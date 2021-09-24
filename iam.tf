@@ -52,7 +52,7 @@ EOF
 
 
 resource "aws_iam_role" "iam_for_lambda" {
-  name = "website-${replace(var.domain_name, ".", "-")}-execution_role"
+  name                  = "website-${string(replace(var.domain_name, ".", "-"))}-execution_role"
   force_detach_policies = true
 
   inline_policy {

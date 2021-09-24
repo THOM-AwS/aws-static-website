@@ -2,7 +2,7 @@
 resource "aws_lambda_function" "cloudfront_lambda" {
   filename      = ".terraform/modules/aws-static-website/secheader.py.zip"
   function_name = "${replace(var.domain_name, ".", "-")}-sec-headers"
-  role          =  aws_iam_role.iam_for_lambda.arn
+  role          = aws_iam_role.iam_for_lambda.arn
   description   = "This lambda will add in security headers for origin responses."
   handler       = "secheader.lambda_handler"
   publish       = true

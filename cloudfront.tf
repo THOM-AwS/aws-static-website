@@ -33,11 +33,11 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   default_cache_behavior {
 
     dynamic "lambda_function_association" {
-      for_each     = var.use_sec_headers ? [1] : []
+      for_each = var.use_sec_headers ? [1] : []
       content {
         event_type   = "origin-response"
         include_body = false
-        lambda_arn = aws_lambda_function.cloudfront_lambda.qualified_arn
+        lambda_arn   = aws_lambda_function.cloudfront_lambda.qualified_arn
       }
     }
 
