@@ -1,5 +1,5 @@
 resource "aws_iam_user" "website-user" {
-  name          = "website-${replace(var.domain_name, ".", "-")}-user"
+  name          = "website-user"
   path          = "/website-users/"
   force_destroy = true
   tags          = var.tags
