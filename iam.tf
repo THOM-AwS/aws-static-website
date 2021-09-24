@@ -12,7 +12,7 @@ resource "aws_iam_access_key" "website-user" {
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_user_policy" "website-user" {
-  name   = "website-${replace(var.domain_name, ".", "-")}-user"
+  name   = "website-user"
   user   = aws_iam_user.website-user.name
   policy = <<EOF
 {
