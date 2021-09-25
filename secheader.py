@@ -12,9 +12,9 @@ STATIC_HEADERS_TO_ADD = {
         "default-src 'self';" 
         "base-uri 'self';"
         "img-src * 'self' data: https: 'unsafe-inline';" 
-        "script-src 'self' 'unsafe-inline' 'unsafe-eval';"
-        "style-src 'self' 'unsafe-inline' fonts.googleapis.com data:;"
-        "font-src 'self' 'unsafe-inline' fonts.gstatic.com fonts.googleapis.com;" 
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' maps.googleapis.com;"
+        "style-src 'self' 'unsafe-inline' *.googleapis.com data:;"
+        "font-src 'self' 'unsafe-inline' *.gstatic.com *.googleapis.com;" 
         "frame-src youtube.com www.youtube.com;" 
         "object-src 'none'"
         }],
