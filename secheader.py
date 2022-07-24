@@ -9,10 +9,10 @@ STATIC_HEADERS_TO_ADD = {
     'content-security-policy': [{
         'key': 'Content-Security-Policy', 
         'value': 
-        "default-src 'self' https://maps.googleapis.com;" 
+        "default-src 'self';" 
         "base-uri 'self';"
         "img-src * 'self' data: https: 'unsafe-inline';" 
-        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.gstatic.com https://maps.googleapis.com https://ipinfo.io;"
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.gstatic.com https://maps.googleapis.com https://geoip-js.com/js/apis/geoip2/v2.1/geoip2.js;"
         "style-src 'self' 'unsafe-inline' *.googleapis.com data:;"
         "font-src 'self' 'unsafe-inline' *.gstatic.com *.googleapis.com;" 
         "frame-src youtube.com www.youtube.com;" 
