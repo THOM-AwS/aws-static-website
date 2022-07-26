@@ -9,12 +9,11 @@ STATIC_HEADERS_TO_ADD = {
     'content-security-policy': [{
         'key': 'Content-Security-Policy', 
         'value': 
-        "default-src 'self' data: https://geoip-js.com https://maps.googleapis.com;" 
+        "default-src 'self' data: https://geoip-js.com *.googleapis.com;" 
         "base-uri 'self';"
         "img-src * 'self' data: https: 'unsafe-inline';" 
-        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.gstatic.com https://maps.googleapis.com https://www.youtube.com;"
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googleapis.com https://maps.gstatic.com https://www.youtube.com *.google.com https://*.gstatic.com data: blob:;"
         "style-src 'self' 'unsafe-inline' *.googleapis.com https://fonts.googleapis.com data:;"
-        "elf' https://*.googleapis.com *.google.com https://*.gstatic.com data: blob:;"
         "font-src 'self' 'unsafe-inline' *.gstatic.com *.googleapis.com;" 
         "frame-src https://youtube.com https://www.youtube.com *.google.com;" 
         "object-src 'none'"
