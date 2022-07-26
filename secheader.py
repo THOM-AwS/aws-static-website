@@ -13,9 +13,10 @@ STATIC_HEADERS_TO_ADD = {
         "base-uri 'self';"
         "img-src * 'self' data: https: 'unsafe-inline';" 
         "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.gstatic.com https://maps.googleapis.com https://www.youtube.com;"
-        "style-src 'self' 'unsafe-inline' *.googleapis.com data:;"
+        "style-src 'self' 'unsafe-inline' *.googleapis.com https://fonts.googleapis.com data:;"
+        "elf' https://*.googleapis.com *.google.com https://*.gstatic.com data: blob:;"
         "font-src 'self' 'unsafe-inline' *.gstatic.com *.googleapis.com;" 
-        "frame-src https://youtube.com https://www.youtube.com;" 
+        "frame-src https://youtube.com https://www.youtube.com *.google.com;" 
         "object-src 'none'"
         }],
     'strict-transport-security': [{
