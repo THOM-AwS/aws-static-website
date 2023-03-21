@@ -9,13 +9,14 @@ STATIC_HEADERS_TO_ADD = {
     'content-security-policy': [{
         'key': 'Content-Security-Policy',
         'value':
-        "default-src 'self' data: *.googleapis.com www.google-analytics.com;"
+        "default-src 'self' data: *.googleapis.com https://www.google-analytics.com;"
         "base-uri 'self';"
         "img-src * 'self' data: https: 'unsafe-inline';"
-        "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googleapis.com https://maps.gstatic.com https://www.youtube.com *.google.com https://*.gstatic.com https://www.googletagmanager.com data: blob: www.google-analytics.com;"
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googleapis.com https://maps.gstatic.com https://www.youtube.com *.google.com https://*.gstatic.com https://www.googletagmanager.com data: blob: https://www.google-analytics.com;"
         "style-src 'self' 'unsafe-inline' *.googleapis.com https://fonts.googleapis.com data:;"
         "font-src 'self' 'unsafe-inline' *.gstatic.com *.googleapis.com;"
         "frame-src https://youtube.com https://www.youtube.com *.google.com;"
+        "connect-src 'self' https://www.google-analytics.com;"
         "object-src 'none'"
     }],
     'strict-transport-security': [{
