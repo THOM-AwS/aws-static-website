@@ -1,6 +1,5 @@
 resource "aws_s3_bucket" "root" {
   bucket        = lower(var.domain_name)
-  acl           = "private"
   tags          = var.tags
   force_destroy = true
   lifecycle {
@@ -8,21 +7,19 @@ resource "aws_s3_bucket" "root" {
   }
 }
 
+resource "aws_s3_bucket_acl" "root_acl" {
+  bucket = aws_s3_bucket.root.id
+  acl    = "private"
+}
+
+
 resource "aws_s3_bucket" "www" {
   bucket        = lower("www.${var.domain_name}")
-  acl           = "private"
   force_destroy = true
   lifecycle {
     prevent_destroy = false
   }
-  # server_side_encryption_configuration {
-  #   rule {
-  #     apply_server_side_encryption_by_default {
-  #       kms_master_key_id = aws_kms_key.mykey.arn
-  #       sse_algorithm     = "aws:kms"
-  #     }
-  #   }
-  # }
+
   dynamic "logging" {
     for_each = length(keys(var.logging)) == 0 ? [] : [var.logging]
 
@@ -35,6 +32,11 @@ resource "aws_s3_bucket" "www" {
     enabled = var.versioning_status
   }
   tags = var.tags
+}
+
+resource "aws_s3_bucket_acl" "www" {
+  bucket = aws_s3_bucket.www.id
+  acl    = "log-delivery-write"
 }
 
 resource "aws_s3_bucket_policy" "cloudfrontpolicy" {
@@ -90,20 +92,42 @@ resource "aws_s3_bucket_public_access_block" "public_access" {
 resource "aws_s3_bucket" "log_bucket" {
   count         = var.create_logging_bucket ? 1 : 0
   bucket        = lower("${var.domain_name}-logging")
-  acl           = "log-delivery-write"
   force_destroy = true
   lifecycle {
     prevent_destroy = false
   }
 
-  # server_side_encryption_configuration {
-  #   rule {
-  #     apply_server_side_encryption_by_default {
-  #       kms_master_key_id = aws_kms_key.mykey.arn
-  #       sse_algorithm     = "aws:kms"
-  #     }
-  #   }
-  # }
   tags = var.tags
 }
 
+resource "aws_s3_bucket_acl" "log" {
+  bucket = aws_s3_bucket.log_bucket[0].id
+  acl    = "log-delivery-write"
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "root" {
+  bucket = aws_s3_bucket.root.bucket
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "www" {
+  bucket = aws_s3_bucket.www.bucket
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "log" {
+  bucket = aws_s3_bucket.log_bucket[0].bucket
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
