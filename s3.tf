@@ -9,7 +9,7 @@ resource "aws_s3_bucket" "root" {
 
 resource "aws_s3_bucket_acl" "root_acl" {
   bucket = aws_s3_bucket.root.id
-  acl    = "private"
+  acl    = "bucket-owner-full-control"
 }
 
 
@@ -28,15 +28,18 @@ resource "aws_s3_bucket" "www" {
       target_prefix = lookup(logging.value, "target_prefix")
     }
   }
-  versioning {
-    enabled = var.versioning_status
-  }
   tags = var.tags
 }
 
+# resource "aws_s3_bucket_versioning" "www" {
+#   bucket = aws_s3_bucket.www.id
+#   status = "Enabled"
+# }
+
+
 resource "aws_s3_bucket_acl" "www" {
   bucket = aws_s3_bucket.www.id
-  acl    = "log-delivery-write"
+  acl    = "bucket-owner-full-control"
 }
 
 resource "aws_s3_bucket_policy" "cloudfrontpolicy" {
