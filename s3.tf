@@ -7,10 +7,10 @@ resource "aws_s3_bucket" "root" {
   }
 }
 
-resource "aws_s3_bucket_acl" "root_acl" {
-  bucket = aws_s3_bucket.root.id
-  acl    = "bucket-owner-full-control"
-}
+# resource "aws_s3_bucket_acl" "root_acl" {
+#   bucket = aws_s3_bucket.root.id
+#   acl    = "bucket-owner-full-control"
+# }
 
 
 resource "aws_s3_bucket" "www" {
@@ -37,10 +37,10 @@ resource "aws_s3_bucket" "www" {
 # }
 
 
-resource "aws_s3_bucket_acl" "www" {
-  bucket = aws_s3_bucket.www.id
-  acl    = "bucket-owner-full-control"
-}
+# resource "aws_s3_bucket_acl" "www" {
+#   bucket = aws_s3_bucket.www.id
+#   acl    = "bucket-owner-full-control"
+# }
 
 resource "aws_s3_bucket_policy" "cloudfrontpolicy" {
   bucket = aws_s3_bucket.www.id
