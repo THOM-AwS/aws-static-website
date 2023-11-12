@@ -7,10 +7,10 @@ resource "aws_s3_bucket" "root" {
   }
 }
 
-resource "aws_s3_bucket_acl" "root_acl" {
-  bucket = aws_s3_bucket.root.id
-  acl    = "public-read"
-}
+# resource "aws_s3_bucket_acl" "root_acl" {
+#   bucket = aws_s3_bucket.root.id
+#   acl    = "public-read"
+# }
 
 
 resource "aws_s3_bucket" "www" {
@@ -37,10 +37,10 @@ resource "aws_s3_bucket" "www" {
 # }
 
 
-resource "aws_s3_bucket_acl" "www" {
-  bucket = aws_s3_bucket.www.id
-  acl    = "public-read"
-}
+# resource "aws_s3_bucket_acl" "www" {
+#   bucket = aws_s3_bucket.www.id
+#   acl    = "public-read"
+# }
 
 resource "aws_s3_bucket_policy" "cloudfrontpolicy" {
   bucket = aws_s3_bucket.www.id
@@ -99,7 +99,6 @@ resource "aws_s3_bucket" "log_bucket" {
   lifecycle {
     prevent_destroy = false
   }
-
   tags = var.tags
 }
 
