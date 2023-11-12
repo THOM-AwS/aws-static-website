@@ -102,10 +102,10 @@ resource "aws_s3_bucket" "log_bucket" {
   tags = var.tags
 }
 
-resource "aws_s3_bucket_acl" "log" {
-  bucket = aws_s3_bucket.log_bucket[0].id
-  acl    = "log-delivery-write"
-}
+# resource "aws_s3_bucket_acl" "log" {
+#   bucket = aws_s3_bucket.log_bucket[0].id
+#   acl    = "log-delivery-write"
+# }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "root" {
   bucket = aws_s3_bucket.root.bucket
