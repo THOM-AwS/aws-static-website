@@ -78,6 +78,7 @@ resource "aws_s3_bucket_public_access_block" "public_access" {
 resource "aws_s3_bucket" "log_bucket" {
   count         = var.create_logging_bucket ? 1 : 0
   bucket        = lower("${var.domain_name}-logging")
+  acl           = "log-delivery-write"
   force_destroy = true
   lifecycle {
     prevent_destroy = false
