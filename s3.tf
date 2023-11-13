@@ -89,8 +89,7 @@ resource "aws_s3_bucket_ownership_controls" "application_logs" {
   bucket = aws_s3_bucket.log_bucket[0].id
 
   rule {
-    control_object_ownership = true
-    object_ownership         = "ObjectWriter"
+    object_ownership = "ObjectWriter"
   }
 }
 
