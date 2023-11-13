@@ -7,12 +7,6 @@ resource "aws_s3_bucket" "root" {
   }
 }
 
-# resource "aws_s3_bucket_acl" "root_acl" {
-#   bucket = aws_s3_bucket.root.id
-#   acl    = "public-read"
-# }
-
-
 resource "aws_s3_bucket" "www" {
   bucket        = lower("www.${var.domain_name}")
   force_destroy = true
@@ -30,17 +24,6 @@ resource "aws_s3_bucket" "www" {
   }
   tags = var.tags
 }
-
-# resource "aws_s3_bucket_versioning" "www" {
-#   bucket = aws_s3_bucket.www.id
-#   status = "Enabled"
-# }
-
-
-# resource "aws_s3_bucket_acl" "www" {
-#   bucket = aws_s3_bucket.www.id
-#   acl    = "public-read"
-# }
 
 resource "aws_s3_bucket_policy" "cloudfrontpolicy" {
   bucket = aws_s3_bucket.www.id
