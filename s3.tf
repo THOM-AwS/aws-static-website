@@ -86,6 +86,14 @@ resource "aws_s3_bucket" "log_bucket" {
   tags = var.tags
 }
 
+resource "aws_s3_bucket_ownership_controls" "application_logs" {
+  bucket = aws_s3_bucket.log_bucket.id
+
+  rule {
+    object_ownership = "ObjectWriter"
+  }
+}
+
 # resource "aws_s3_bucket_acl" "log" {
 #   bucket = aws_s3_bucket.log_bucket[0].id
 #   acl    = "log-delivery-write"
