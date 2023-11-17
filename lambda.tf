@@ -14,6 +14,13 @@ resource "aws_lambda_function" "cloudfront_lambda" {
 
   runtime = "python3.8"
   tags    = var.tags
-
 }
 
+resource "null_resource" "zip_lambda_sec" {
+  triggers = {
+    lambda_hash = filemd5("secheader.py")
+  }
+  provisioner "local-exec" {
+    command = "apk add --no-cache zip && zip -r secheader.py.zip secheader.py"
+  }
+}
