@@ -18,7 +18,7 @@ resource "aws_lambda_function" "cloudfront_lambda" {
 
 resource "null_resource" "zip_lambda_sec" {
   triggers = {
-    lambda_hash = filemd5("secheader.py")
+    lambda_hash = filemd5(".terraform/modules/aws-static-website/secheader.py")
   }
   provisioner "local-exec" {
     command = "apk add --no-cache zip && zip -r secheader.py.zip secheader.py"
