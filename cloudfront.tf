@@ -32,6 +32,15 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   default_cache_behavior {
 
+    forwarded_values {
+      query_string = false
+      headers      = ["Origin", "Access-Control-Request-Headers", "Access-Control-Request-Method"]
+
+      cookies {
+        forward = "none"
+      }
+    }
+
     dynamic "lambda_function_association" {
       for_each = var.use_sec_headers ? [1] : []
       content {
