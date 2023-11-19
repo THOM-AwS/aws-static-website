@@ -9,7 +9,7 @@ STATIC_HEADERS_TO_ADD = {
     'content-security-policy': [{
         'key': 'Content-Security-Policy',
         'value':
-        "default-src 'self' data: *.googleapis.com https://www.google-analytics.com https://analytics.google.com *.hamer.cloud;"
+        "default-src 'self' data: *.googleapis.com https://www.google-analytics.com https://analytics.google.com https://api.hamer.cloud;"
         "base-uri 'self';"
         "img-src * 'self' data: https: 'unsafe-inline';"
         "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googleapis.com https://maps.gstatic.com https://www.youtube.com *.google.com https://*.gstatic.com https://www.googletagmanager.com data: blob: https://www.google-analytics.com;"
@@ -34,10 +34,6 @@ STATIC_HEADERS_TO_ADD = {
     'referrer-policy': [{
         'key': 'Referrer-Policy',
         'value': 'same-origin'
-    }],
-    'access-control-allow-origin': [{
-        'key': 'Access-Control-Allow-Origin',
-        'value': '*.hamer.cloud'
     }],
 }
 
