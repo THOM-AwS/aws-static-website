@@ -27,7 +27,7 @@ STATIC_HEADERS_TO_ADD = {
                   "style-src 'self' 'unsafe-inline' *.googleapis.com https://fonts.googleapis.com data:; "
                   "font-src 'self' 'unsafe-inline' *.gstatic.com *.googleapis.com; "
                   "frame-src https://youtube.com https://www.youtube.com *.google.com; "
-                  "connect-src 'self' https://www.google-analytics.com https://maps.googleapis.com https://*.hamer.cloud https://analytics.google.com https://analytics.google.com https://api.openweathermap.org https://pkgstore.datahub.io https://datahub.io; "
+                  "connect-src 'self' https://www.google-analytics.com https://maps.googleapis.com https://*.hamer.cloud https://analytics.google.com https://analytics.google.com https://api.openweathermap.org https://datahub.io/core/geo-countries/r/countries.geojson https://pkgstore.datahub.io/core/geo-countries/countries/archive/*; "
                   "object-src 'none'")
     }],
     'strict-transport-security': [{
