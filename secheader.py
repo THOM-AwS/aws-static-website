@@ -1,5 +1,17 @@
-import json
-import os
+def add_cors_headers(headers):
+    """ Add CORS headers to the response """
+    headers['access-control-allow-origin'] = [{
+        'key': 'Access-Control-Allow-Origin',
+        'value': '*'  # Or specify your specific domain
+    }]
+    headers['access-control-allow-methods'] = [{
+        'key': 'Access-Control-Allow-Methods',
+        'value': 'GET, POST, OPTIONS, PUT, DELETE'  # Adjust as necessary
+    }]
+    headers['access-control-allow-headers'] = [{
+        'key': 'Access-Control-Allow-Headers',
+        'value': 'Content-Type'  # Adjust as necessary
+    }]
 
 STATIC_HEADERS_TO_ADD = {
     'x-frame-options': [{
@@ -8,16 +20,15 @@ STATIC_HEADERS_TO_ADD = {
     }],
     'content-security-policy': [{
         'key': 'Content-Security-Policy',
-        'value':
-        "default-src 'self' data: *.googleapis.com https://www.google-analytics.com https://analytics.google.com https://api.hamer.cloud;"
-        "base-uri 'self';"
-        "img-src * 'self' data: https: 'unsafe-inline';"
-        "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googleapis.com https://maps.gstatic.com https://www.youtube.com *.google.com https://*.gstatic.com https://www.googletagmanager.com data: blob: https://www.google-analytics.com;"
-        "style-src 'self' 'unsafe-inline' *.googleapis.com https://fonts.googleapis.com data:;"
-        "font-src 'self' 'unsafe-inline' *.gstatic.com *.googleapis.com;"
-        "frame-src https://youtube.com https://www.youtube.com *.google.com;"
-        "connect-src 'self' https://www.google-analytics.com https://maps.googleapis.com https://api.hamer.cloud https://analytics.google.com https://analytics.google.com https://api.openweathermap.org https://*.datahub.io ;"
-        "object-src 'none'"
+        'value': ("default-src 'self' data: *.googleapis.com https://www.google-analytics.com https://analytics.google.com https://api.hamer.cloud; "
+                  "base-uri 'self'; "
+                  "img-src * 'self' data: https: 'unsafe-inline'; "
+                  "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googleapis.com https://maps.gstatic.com https://www.youtube.com *.google.com https://*.gstatic.com https://www.googletagmanager.com data: blob: https://www.google-analytics.com; "
+                  "style-src 'self' 'unsafe-inline' *.googleapis.com https://fonts.googleapis.com data:; "
+                  "font-src 'self' 'unsafe-inline' *.gstatic.com *.googleapis.com; "
+                  "frame-src https://youtube.com https://www.youtube.com *.google.com; "
+                  "connect-src 'self' https://www.google-analytics.com https://maps.googleapis.com https://api.hamer.cloud https://analytics.google.com https://analytics.google.com https://api.openweathermap.org https://pkgstore.datahub.io https://datahub.io; "
+                  "object-src 'none'")
     }],
     'strict-transport-security': [{
         'key': 'Strict-Transport-Security',
@@ -37,9 +48,26 @@ STATIC_HEADERS_TO_ADD = {
     }],
 }
 
-
 def lambda_handler(event, context):
-    # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-event-structure.html#lambda-event-structure-response-origin
+    request = event['Records'][0]['cf']['request']
     response = event['Records'][0]['cf']['response']
-    response['headers'].update(STATIC_HEADERS_TO_ADD)
+
+    # Add or update security headers
+    headers = response.get('headers', {})
+    for key, value in STATIC_HEADERS_TO_ADD.items():
+        headers[key.lower()] = value  # Header names are case-insensitive
+
+    # Add CORS headers
+    add_cors_headers(headers)
+
+    # Handle OPTIONS preflight requests
+    if request['method'] == 'OPTIONS':
+        return {
+            'status': '204',
+            'statusDescription': 'No Content',
+            'headers': headers,
+            'body': '',
+        }
+
+    response['headers'] = headers
     return response
