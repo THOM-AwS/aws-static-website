@@ -2,15 +2,15 @@ def add_cors_headers(headers):
     """ Add CORS headers to the response """
     headers['access-control-allow-origin'] = [{
         'key': 'Access-Control-Allow-Origin',
-        'value': '*'  # Or specify your specific domain
+        'value': '*'
     }]
     headers['access-control-allow-methods'] = [{
         'key': 'Access-Control-Allow-Methods',
-        'value': 'GET, POST, OPTIONS'  # Adjust as necessary
+        'value': 'GET, POST, OPTIONS'
     }]
     headers['access-control-allow-headers'] = [{
         'key': 'Access-Control-Allow-Headers',
-        'value': 'Content-Type'  # Adjust as necessary
+        'value': 'Content-Type'
     }]
 
 STATIC_HEADERS_TO_ADD = {
@@ -20,10 +20,10 @@ STATIC_HEADERS_TO_ADD = {
     }],
     'content-security-policy': [{
         'key': 'Content-Security-Policy',
-        'value': ("default-src 'self' data: *.googleapis.com https://www.google-analytics.com https://analytics.google.com https://api.hamer.cloud https://*.datahub.io https://cdn.jsdelivr.net; "
+        'value': ("default-src 'self' data: *.googleapis.com https://www.google-analytics.com https://analytics.google.com https://api.hamer.cloud https://*.datahub.io; "
                   "base-uri 'self'; "
                   "img-src * 'self' data: https: 'unsafe-inline'; "
-                  "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googleapis.com https://maps.gstatic.com https://www.youtube.com *.google.com https://*.gstatic.com https://www.googletagmanager.com 'https://cdn.jsdelivr.net' 'https://cdn.jsdelivr.net/github-cards/latest/widget.js' data: https://www.google-analytics.com; "
+                  "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googleapis.com https://maps.gstatic.com https://www.youtube.com *.google.com https://*.gstatic.com https://www.googletagmanager.com 'https://cdn.jsdelivr.net' data: https://www.google-analytics.com; "
                   "style-src 'self' 'unsafe-inline' *.googleapis.com https://fonts.googleapis.com data:; "
                   "font-src 'self' 'unsafe-inline' *.gstatic.com *.googleapis.com; "
                   "frame-src https://youtube.com https://www.youtube.com *.google.com; "
