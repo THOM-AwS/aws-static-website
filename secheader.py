@@ -23,11 +23,11 @@ STATIC_HEADERS_TO_ADD = {
         'value': ("default-src 'self' data: *.googleapis.com https://www.google-analytics.com https://analytics.google.com https://api.hamer.cloud https://*.datahub.io; "
                   "base-uri 'self'; "
                   "img-src * 'self' data: https: 'unsafe-inline'; "
-                  "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googleapis.com https://maps.gstatic.com https://www.youtube.com *.google.com https://*.gstatic.com https://www.googletagmanager.com data: https://cdn.jsdelivr.net https://www.google-analytics.com; "
+                  "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googleapis.com https://maps.gstatic.com https://www.youtube.com *.google.com https://*.gstatic.com https://www.googletagmanager.com https://cdn.jsdelivr.net data: https://www.google-analytics.com; "
                   "style-src 'self' 'unsafe-inline' *.googleapis.com https://fonts.googleapis.com data:; "
                   "font-src 'self' 'unsafe-inline' *.gstatic.com *.googleapis.com; "
                   "frame-src https://youtube.com https://www.youtube.com *.google.com; "
-                  "connect-src 'self' https://www.google-analytics.com https://maps.googleapis.com https://*.hamer.cloud https://analytics.google.com https://api.openweathermap.org https://datahub.io/core/geo-countries/r/countries.geojson https://pkgstore.datahub.io/core/geo-countries/countries/archive/*; "
+                  "connect-src 'self' https://www.google-analytics.com https://maps.googleapis.com https://*.hamer.cloud https://analytics.google.com https://api.openweathermap.org https://datahub.io/core/geo-countries/r/countries.geojson https://pkgstore.datahub.io/core/geo-countries/countries/archive/* https://cdn.jsdelivr.net; "
                   "object-src 'none'")
     }],
     'strict-transport-security': [{
