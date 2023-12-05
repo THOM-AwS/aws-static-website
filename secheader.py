@@ -6,7 +6,7 @@ def add_cors_headers(headers):
     }]
     headers['access-control-allow-methods'] = [{
         'key': 'Access-Control-Allow-Methods',
-        'value': 'GET, POST, OPTIONS, PUT, DELETE'  # Adjust as necessary
+        'value': 'GET, POST, OPTIONS'  # Adjust as necessary
     }]
     headers['access-control-allow-headers'] = [{
         'key': 'Access-Control-Allow-Headers',
@@ -23,7 +23,7 @@ STATIC_HEADERS_TO_ADD = {
         'value': ("default-src 'self' data: *.googleapis.com https://www.google-analytics.com https://analytics.google.com https://api.hamer.cloud https://*.datahub.io; "
                   "base-uri 'self'; "
                   "img-src * 'self' data: https: 'unsafe-inline'; "
-                  "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googleapis.com https://maps.gstatic.com https://www.youtube.com *.google.com https://*.gstatic.com https://www.googletagmanager.com data: blob: https://www.google-analytics.com; "
+                  "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googleapis.com https://maps.gstatic.com https://www.youtube.com *.google.com https://*.gstatic.com https://www.googletagmanager.com https://cdn.jsdelivr.net data: blob: https://www.google-analytics.com; "
                   "style-src 'self' 'unsafe-inline' *.googleapis.com https://fonts.googleapis.com data:; "
                   "font-src 'self' 'unsafe-inline' *.gstatic.com *.googleapis.com; "
                   "frame-src https://youtube.com https://www.youtube.com *.google.com; "
