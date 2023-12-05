@@ -23,7 +23,7 @@ STATIC_HEADERS_TO_ADD = {
         'value': ("default-src 'self' data: *.googleapis.com https://www.google-analytics.com https://analytics.google.com https://api.hamer.cloud https://*.datahub.io; "
                   "base-uri 'self'; "
                   "img-src * 'self' data: https: 'unsafe-inline'; "
-                  "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googleapis.com https://maps.gstatic.com https://www.youtube.com *.google.com https://*.gstatic.com https://www.googletagmanager.com data: https://www.google-analytics.com https://cdn.jsdelivr.net/github-cards/latest/widget.js; "
+                  "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googleapis.com https://maps.gstatic.com https://www.youtube.com *.google.com https://*.gstatic.com https://www.googletagmanager.com https://cdn.jsdelivr.net https://cdn.jsdelivr.net/github-cards/latest/widget.js data: https://www.google-analytics.com; "
                   "style-src 'self' 'unsafe-inline' *.googleapis.com https://fonts.googleapis.com data:; "
                   "font-src 'self' 'unsafe-inline' *.gstatic.com *.googleapis.com; "
                   "frame-src https://youtube.com https://www.youtube.com *.google.com; "
