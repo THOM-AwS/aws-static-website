@@ -20,7 +20,7 @@ STATIC_HEADERS_TO_ADD = {
     }],
     'content-security-policy': [{
         'key': 'Content-Security-Policy',
-        'value': ("default-src 'self' data: *.googleapis.com https://www.google-analytics.com https://analytics.google.com https://api.hamer.cloud https://*.datahub.io; "
+        'value': ("default-src 'self' data: *.googleapis.com https://www.google-analytics.com https://analytics.google.com https://api.hamer.cloud https://*.datahub.io https://cdn.jsdelivr.net; "
                   "base-uri 'self'; "
                   "img-src * 'self' data: https: 'unsafe-inline'; "
                   "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googleapis.com https://maps.gstatic.com https://www.youtube.com *.google.com https://*.gstatic.com https://www.googletagmanager.com https://cdn.jsdelivr.net data: blob: https://www.google-analytics.com; "
