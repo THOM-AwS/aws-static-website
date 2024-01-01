@@ -21,6 +21,6 @@ resource "null_resource" "zip_lambda_sec" {
     lambda_hash = filemd5(".terraform/modules/aws-static-website/secheader.py")
   }
   provisioner "local-exec" {
-    command = "apk add --no-cache zip && wait 3 && zip -r secheader.py.zip . -i secheader.py"
+    command = "apk add zip && wait 3 && zip -r secheader.py.zip . -i secheader.py"
   }
 }
