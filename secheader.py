@@ -17,14 +17,14 @@ STATIC_HEADERS_TO_ADD = {
         {
             "key": "Content-Security-Policy",
             "value": (
-                "default-src 'self' data: *.googleapis.com https://www.google-analytics.com https://analytics.google.com https://api.hamer.cloud https://*.datahub.io https://cdnjs.cloudflare.com; "
+                "default-src 'self' data: *.googleapis.com https://www.google-analytics.com https://analytics.google.com https://api.hamer.cloud/* https://*.datahub.io https://cdnjs.cloudflare.com; "
                 "base-uri 'self'; "
                 "img-src * 'self' data: https: 'unsafe-inline'; "
                 "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googleapis.com https://maps.gstatic.com https://www.youtube.com *.google.com https://*.gstatic.com https://www.googletagmanager.com https://www.google-analytics.com https://cdn.jsdelivr.net https://github.com https://cdnjs.cloudflare.com data: https://www.google-analytics.com; "
                 "style-src 'self' 'unsafe-inline' *.googleapis.com https://fonts.googleapis.com https://cdnjs.cloudflare.com data:;"
                 "font-src 'self' 'unsafe-inline' *.gstatic.com *.googleapis.com https://cdnjs.cloudflare.com; "
                 "frame-src https://youtube.com https://www.youtube.com *.google.com https://cdn.jsdelivr.net; "
-                "connect-src 'self' https://www.google-analytics.com https://maps.googleapis.com https://*.hamer.cloud https://analytics.google.com https://api.openweathermap.org https://datahub.io/core/geo-countries/r/countries.geojson https://pkgstore.datahub.io/core/geo-countries/countries/archive/* https://cdn.jsdelivr.net https://api.github.com; "
+                "connect-src 'self' https://www.google-analytics.com https://maps.googleapis.com https://*.hamer.cloud/* https://analytics.google.com https://api.openweathermap.org https://datahub.io/core/geo-countries/r/countries.geojson https://pkgstore.datahub.io/core/geo-countries/countries/archive/* https://cdn.jsdelivr.net https://api.github.com; "
                 "object-src 'none'"
             ),
         }
