@@ -1,23 +1,10 @@
-def add_cors_headers(headers):
-    """Add CORS headers to the response"""
-    headers["access-control-allow-origin"] = [
-        {"key": "Access-Control-Allow-Origin", "value": "*"}
-    ]
-    headers["access-control-allow-methods"] = [
-        {"key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS"}
-    ]
-    headers["access-control-allow-headers"] = [
-        {"key": "Access-Control-Allow-Headers", "value": "Content-Type"}
-    ]
-
-
 STATIC_HEADERS_TO_ADD = {
     "x-frame-options": [{"key": "X-Frame-Options", "value": "DENY"}],
     "content-security-policy": [
         {
-            "key": "Content-Security-Policy",
+            "key": "Content-Security-Policy-Report-Only",
             "value": (
-                "default-src 'self' data: *.googleapis.com https://www.google-analytics.com https://analytics.google.com https://*.hamer.cloud https://*.datahub.io https://cdnjs.cloudflare.com https://play.google.com; "
+                "default-src 'self'; "
                 "base-uri 'self'; "
                 "img-src * 'self' data: https: 'unsafe-inline'; "
                 "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googleapis.com https://maps.gstatic.com https://www.youtube.com *.google.com https://*.gstatic.com https://www.googletagmanager.com https://www.google-analytics.com https://cdn.jsdelivr.net https://github.com https://cdnjs.cloudflare.com data: https://www.google-analytics.com; "
@@ -40,6 +27,17 @@ STATIC_HEADERS_TO_ADD = {
     "referrer-policy": [{"key": "Referrer-Policy", "value": "same-origin"}],
 }
 
+def add_cors_headers(headers):
+    """Add CORS headers to the response"""
+    headers["access-control-allow-origin"] = [
+        {"key": "Access-Control-Allow-Origin", "value": "*"}
+    ]
+    headers["access-control-allow-methods"] = [
+        {"key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS"}
+    ]
+    headers["access-control-allow-headers"] = [
+        {"key": "Access-Control-Allow-Headers", "value": "Content-Type"}
+    ]
 
 def lambda_handler(event, context):
     request = event["Records"][0]["cf"]["request"]
@@ -59,8 +57,8 @@ def lambda_handler(event, context):
             "status": "204",
             "statusDescription": "No Content",
             "headers": headers,
-            "body": "",
         }
 
+    # Update response headers with modified headers
     response["headers"] = headers
     return response
