@@ -1,90 +1,80 @@
-def add_cors_headers(headers):
-    """Add CORS headers to the response"""
-    headers["access-control-allow-origin"] = [
-        {"key": "access-control-allow-origin", "value": "https://*.googleapis.com https://www.google-analytics.com https://analytics.google.com https://*.hamer.cloud https://*.datahub.io https://cdnjs.cloudflare.com https://play.google.com"}
-    ]
-    headers["access-control-allow-methods"] = [
-        {"key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS"}
-    ]
-    headers["access-control-allow-headers"] = [
-        {"key": "Access-Control-Allow-Headers", "value": "Content-Type"}
-    ]
+import boto3
+import json
 
+s3 = boto3.client('s3')
 
-STATIC_HEADERS_TO_ADD = {
-    "x-frame-options": [{"key": "X-Frame-Options", "value": "DENY"}],
-    "content-security-policy": [
-        {
-            Content-Security-Policy: 
-                default-src 'self' *; 
-                script-src 'self' * 'unsafe-inline' 'unsafe-eval'; 
-                style-src 'self' * 'unsafe-inline'; 
-                img-src 'self' * data:; 
-                font-src 'self' * data:; 
-                object-src 'self' *; 
-                frame-src 'self' *;
-            "key": "content-security-policy",
-            "value": (
-                "default-src 'self'; "
-                "base-uri 'self'; "
-                "img-src 'self' * data: *.googleapis.com https://www.google-analytics.com https://analytics.google.com https://*.hamer.cloud https://*.datahub.io https://cdnjs.cloudflare.com https://play.google.com; "
-                "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googleapis.com https://maps.gstatic.com https://www.youtube.com *.google.com https://*.gstatic.com https://www.googletagmanager.com https://www.google-analytics.com https://cdn.jsdelivr.net https://github.com https://cdnjs.cloudflare.com; "
-                "style-src 'self' 'unsafe-inline' *.googleapis.com https://fonts.googleapis.com https://cdnjs.cloudflare.com; "
-                "font-src 'self' data: *.gstatic.com *.googleapis.com https://cdnjs.cloudflare.com; "
-                "frame-src https://www.youtube.com *.google.com https://cdn.jsdelivr.net; "
-                "connect-src 'self' https://www.google-analytics.com https://maps.googleapis.com https://*.hamer.cloud https://analytics.google.com https://api.openweathermap.org https://datahub.io https://pkgstore.datahub.io https://cdn.jsdelivr.net https://api.github.com; "
+def lambda_handler(event, context):
+    try:
+        record = event['Records'][0]
+        request = record['cf']['request']
+        response = record['cf']['response'] if 'response' in record['cf'] else None
+
+        # Add CORS headers
+        response_headers = response['headers'] if response else request['headers']
+        cors_headers = [
+            {'key': 'access-control-allow-origin', 'value': '*'},
+            {'key': 'access-control-allow-methods', 'value': 'GET, POST, HEAD, OPTIONS'},
+            {'key': 'access-control-allow-headers', 'value': 'Content-Type'},
+        ]
+        for header in cors_headers:
+            key = header['key'].lower()
+            value = header['value']
+            if key in response_headers:
+                response_headers[key].append({'key': key, 'value': value})
+            else:
+                response_headers[key] = [{'key': key, 'value': value}]
+
+        # Add security headers
+        security_headers = [
+            {'key': 'content-security-policy', 'value': (
+                "default-src *; "
+                "script-src * 'unsafe-inline'; "
+                "style-src * 'unsafe-inline'; "
+                "img-src * data: *; "
+                "font-src *; "
+                "connect-src *; "
                 "object-src 'none'; "
                 "form-action 'self'; "
                 "frame-ancestors 'none'; "
-                "block-all-mixed-content; "
                 "upgrade-insecure-requests"
-            ),
-        }
-    ],
-    "strict-transport-security": [
-        {
-            "key": "Strict-Transport-Security",
-            "value": "max-age=63072000; includeSubdomains; preload",
-        }
-    ],
-    "x-content-type-options": [{"key": "X-Content-Type-Options", "value": "nosniff"}],
-    "x-xss-protection": [{"key": "X-XSS-Protection", "value": "1; mode=block"}],
-    "referrer-policy": [{"key": "Referrer-Policy", "value": "same-origin"}],
-    "permissions-policy": [
-        {
-            "key": "permissions-policy",
-            "value": (
+            )},
+            {'key': 'strict-transport-security', 'value': 'max-age=63072000; includeSubdomains; preload'},
+            {'key': 'x-content-type-options', 'value': 'nosniff'},
+            {'key': 'x-xss-protection', 'value': '1; mode=block'},
+            {'key': 'referrer-policy', 'value': 'strict-origin-when-cross-origin'},
+            {'key': 'permissions-policy', 'value': (
+                "accelerometer=(), "
                 "geolocation=(), "
                 "microphone=(), "
                 "camera=(), "
                 "fullscreen=(self), "
-                "payment=()"
-            ),
-        }
-    ],
-}
+                "payment=(), "
+                "interest-cohort=(), "
+                "usb=(), "
+                "magnetometer=(), "
+                "gyroscope=()"
+            )},
+        ]
+        for header in security_headers:
+            key = header['key'].lower()
+            value = header['value']
+            if key in response_headers:
+                response_headers[key].append({'key': key, 'value': value})
+            else:
+                response_headers[key] = [{'key': key, 'value': value}]
 
+        if response:
+            return response
+        else:
+            return request
 
-def lambda_handler(event, context):
-    request = event["Records"][0]["cf"]["request"]
-    response = event["Records"][0]["cf"]["response"]
-
-    # Add or update security headers
-    headers = response.get("headers", {})
-    for key, value in STATIC_HEADERS_TO_ADD.items():
-        headers[key.lower()] = value  # Header names are case-insensitive
-
-    # Add CORS headers
-    add_cors_headers(headers)
-
-    # Handle OPTIONS preflight requests
-    if request["method"] == "OPTIONS":
+    except Exception as e:
+        print(f"Error in lambda_handler: {str(e)}")
         return {
-            "status": "204",
-            "statusDescription": "No Content",
-            "headers": headers,
-            "body": "",
+            'status': '500',
+            'statusDescription': 'Internal Server Error',
+            'body': json.dumps({'message': f"Error in lambda_handler: {str(e)}"}),
+            'headers': {
+                'content-type': [{'key': 'Content-Type', 'value': 'application/json'}],
+            },
         }
-
-    response["headers"] = headers
-    return response
