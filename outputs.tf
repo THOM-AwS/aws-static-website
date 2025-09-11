@@ -21,6 +21,7 @@ output "user_acces_key" {
 output "user_secret_access_key" {
   description = "Secret Access Key"
   value       = aws_iam_access_key.website-user.secret
+  sensitive   = true
 }
 
 output "cloudfront_distribution_id" {
