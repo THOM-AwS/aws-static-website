@@ -27,12 +27,13 @@ def lambda_handler(event, context):
         # Add security headers
         security_headers = [
             {'key': 'content-security-policy', 'value': (
-                "default-src *; "
-                "script-src * 'unsafe-inline'; "
-                "style-src * 'unsafe-inline'; "
-                "img-src * data: *; "
-                "font-src *; "
-                "connect-src *; "
+                "default-src 'self'; "
+                "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google.com https://static.doubleclick.net https://www.youtube.com https://s.ytimg.com; "
+                "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://www.youtube.com; "
+                "img-src 'self' data: https://avatars.githubusercontent.com https://i.ytimg.com https://yt3.ggpht.com; "
+                "font-src 'self' https://fonts.gstatic.com; "
+                "connect-src 'self' https://www.googletagmanager.com https://www.google.com https://www.youtube.com https://play.google.com; "
+                "frame-src https://www.youtube.com; "
                 "object-src 'none'; "
                 "form-action 'self'; "
                 "frame-ancestors 'none'; "
