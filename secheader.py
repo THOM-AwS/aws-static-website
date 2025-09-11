@@ -14,7 +14,7 @@ def lambda_handler(event, context):
         cors_headers = [
             {'key': 'access-control-allow-origin', 'value': '*'},
             {'key': 'access-control-allow-methods', 'value': 'GET, POST, HEAD, OPTIONS'},
-            {'key': 'access-control-allow-headers', 'value': 'Content-Type'},
+            {'key': 'access-control-allow-headers', 'value': 'content-type'},
         ]
         for header in cors_headers:
             key = header['key'].lower()
