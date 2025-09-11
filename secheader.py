@@ -30,7 +30,7 @@ def lambda_handler(event, context):
                 "default-src 'self'; "
                 "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google.com https://static.doubleclick.net https://www.youtube.com https://s.ytimg.com https://cdn.jsdelivr.net https://unpkg.com; "
                 "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://www.youtube.com https://cdnjs.cloudflare.com; "
-                "img-src 'self' data: https://avatars.githubusercontent.com https://i.ytimg.com https://yt3.ggpht.com https://www.googletagmanager.com https://www.google.com.au; "
+                "img-src 'self' data: https://avatars.githubusercontent.com https://i.ytimg.com https://yt3.ggpht.com https://www.googletagmanager.com https://www.google.com.au https://www.google-analytics.com; "
                 "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; "
                 "connect-src 'self' https://www.googletagmanager.com https://www.google.com https://www.youtube.com https://play.google.com https://api.hamer.cloud https://api.github.com; "
                 "frame-src https://www.youtube.com https://cdn.jsdelivr.net; "
