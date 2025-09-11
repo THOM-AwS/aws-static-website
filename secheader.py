@@ -76,6 +76,6 @@ def lambda_handler(event, context):
             'statusDescription': 'Internal Server Error',
             'body': json.dumps({'message': f"Error in lambda_handler: {str(e)}"}),
             'headers': {
-                'content-type': [{'key': 'Content-Type', 'value': 'application/json'}],
+                'content-type': [{'key': 'content-type', 'value': 'application/json'}],
             },
         }
