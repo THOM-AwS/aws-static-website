@@ -28,11 +28,11 @@ def lambda_handler(event, context):
         security_headers = [
             {'key': 'content-security-policy', 'value': (
                 "default-src 'self'; "
-                "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google.com https://static.doubleclick.net https://www.youtube.com https://s.ytimg.com https://cdn.jsdelivr.net https://unpkg.com https://maps.googleapis.com; "
+                "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google.com https://static.doubleclick.net https://www.youtube.com https://s.ytimg.com https://cdn.jsdelivr.net https://unpkg.com https://maps.googleapis.com; "
                 "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://www.youtube.com https://cdnjs.cloudflare.com; "
                 "img-src 'self' data: https://avatars.githubusercontent.com https://i.ytimg.com https://yt3.ggpht.com https://www.googletagmanager.com https://www.google.com.au https://www.google-analytics.com https://maps.googleapis.com https://maps.gstatic.com https://khms0.googleapis.com https://khms1.googleapis.com; "
                 "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; "
-                "connect-src 'self' https://www.googletagmanager.com https://www.google.com https://www.youtube.com https://play.google.com https://api.hamer.cloud https://api.github.com https://maps.googleapis.com; "
+                "connect-src 'self' https://www.googletagmanager.com https://www.google.com https://www.google.com.au https://www.google-analytics.com https://www.youtube.com https://play.google.com https://api.hamer.cloud https://api.github.com https://maps.googleapis.com https://raw.githubusercontent.com; "
                 "frame-src https://www.youtube.com https://cdn.jsdelivr.net; "
                 "object-src 'none'; "
                 "form-action 'self'; "
@@ -63,6 +63,12 @@ def lambda_handler(event, context):
                 response_headers[key].append({'key': key, 'value': value})
             else:
                 response_headers[key] = [{'key': key, 'value': value}]
+        
+        # Add charset encoding header if content-type exists
+        if 'content-type' in response_headers:
+            content_type_value = response_headers['content-type'][0]['value']
+            if 'text/html' in content_type_value and 'charset=' not in content_type_value:
+                response_headers['content-type'][0]['value'] = content_type_value + '; charset=utf-8'
 
         if response:
             return response
