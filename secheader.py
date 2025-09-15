@@ -32,7 +32,7 @@ def lambda_handler(event, context):
                 "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://www.youtube.com https://cdnjs.cloudflare.com; "
                 "img-src 'self' data: https://avatars.githubusercontent.com https://i.ytimg.com https://yt3.ggpht.com https://www.googletagmanager.com https://www.google.com.au https://www.google-analytics.com https://maps.googleapis.com https://maps.gstatic.com https://khms0.googleapis.com https://khms1.googleapis.com; "
                 "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; "
-                "connect-src 'self' https://www.googletagmanager.com https://www.google.com https://www.google.com.au https://www.google-analytics.com https://www.youtube.com https://play.google.com https://api.hamer.cloud https://api.github.com https://maps.googleapis.com https://raw.githubusercontent.com; "
+                "connect-src 'self' https://www.googletagmanager.com https://www.google.com https://www.google.com.au https://www.google-analytics.com https://www.youtube.com https://play.google.com https://api.hamer.cloud https://api.github.com https://maps.googleapis.com https://raw.githubusercontent.com https://*.azurewebsites.net; "
                 "frame-src https://www.youtube.com https://cdn.jsdelivr.net; "
                 "object-src 'none'; "
                 "form-action 'self'; "
