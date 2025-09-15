@@ -1,6 +1,6 @@
 
 resource "aws_lambda_function" "cloudfront_lambda" {
-  filename      = ".terraform/modules/aws-static-website/secheader.py.zip"
+  filename      = "secheader.py.zip"
   function_name = "${replace(var.domain_name, ".", "-")}-sec-headers"
   role          = aws_iam_role.iam_for_lambda.arn
   description   = "This lambda will add in security headers for origin responses."
@@ -10,7 +10,7 @@ resource "aws_lambda_function" "cloudfront_lambda" {
   # The filebase64sha256() function is available in Terraform 0.11.12 and later
   # For Terraform 0.11.11 and earlier, use the base64sha256() function and the file() function:
   # source_code_hash = "${base64sha256(file("lambda_function_payload.zip"))}"
-  source_code_hash = filebase64sha256(".terraform/modules/aws-static-website/secheader.py.zip")
+  source_code_hash = filebase64sha256("secheader.py.zip")
 
   runtime = "python3.8"
   tags    = var.tags
@@ -18,7 +18,7 @@ resource "aws_lambda_function" "cloudfront_lambda" {
 
 resource "null_resource" "zip_lambda_sec" {
   triggers = {
-    lambda_hash = filemd5(".terraform/modules/aws-static-website/secheader.py")
+    lambda_hash = filemd5("secheader.py")
   }
   provisioner "local-exec" {
     command = <<EOT
