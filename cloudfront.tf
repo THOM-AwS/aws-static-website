@@ -1,3 +1,10 @@
+resource "aws_cloudfront_origin_access_control" "default" {
+  name                              = "s3-oac-${var.domain_name}"
+  description                       = "OAC for ${var.domain_name}"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
+}
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
   depends_on = [
@@ -6,12 +13,9 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   ]
 
   origin {
-    domain_name = "www.${var.domain_name}.s3.amazonaws.com"
-    origin_id   = "www.${var.domain_name}-origin"
-
-    s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.origin_access_identity.cloudfront_access_identity_path
-    }
+    domain_name              = aws_s3_bucket.www.bucket_regional_domain_name
+    origin_id                = "www.${var.domain_name}-origin"
+    origin_access_control_id = aws_cloudfront_origin_access_control.default.id
   }
 
   enabled             = true
@@ -77,7 +81,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     content {
       acm_certificate_arn      = data.aws_acm_certificate.acm_cert[0].arn
       ssl_support_method       = "sni-only"
-      minimum_protocol_version = "TLSv1"
+      minimum_protocol_version = "TLSv1.2_2021"
     }
   }
 
@@ -90,10 +94,6 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   wait_for_deployment = true
   tags                = var.tags
-}
-
-resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
-  comment = "access-identity-${var.domain_name}.s3.amazonaws.com"
 }
 
 data "aws_cloudfront_origin_request_policy" "this" {

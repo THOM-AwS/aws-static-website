@@ -1,7 +1,5 @@
-import boto3
 import json
 
-s3 = boto3.client('s3')
 
 def lambda_handler(event, context):
     try:
@@ -9,39 +7,13 @@ def lambda_handler(event, context):
         request = record['cf']['request']
         response = record['cf']['response'] if 'response' in record['cf'] else None
 
-        # Add CORS headers
         response_headers = response['headers'] if response else request['headers']
-        cors_headers = [
-            {'key': 'access-control-allow-origin', 'value': '*'},
-            {'key': 'access-control-allow-methods', 'value': 'GET, POST, HEAD, OPTIONS'},
-            {'key': 'access-control-allow-headers', 'value': 'content-type'},
-        ]
-        for header in cors_headers:
-            key = header['key'].lower()
-            value = header['value']
-            if key in response_headers:
-                response_headers[key].append({'key': key, 'value': value})
-            else:
-                response_headers[key] = [{'key': key, 'value': value}]
 
-        # Add security headers
+        # Security headers (sensible defaults for any static site)
         security_headers = [
-            {'key': 'content-security-policy', 'value': (
-                "default-src 'self'; "
-                "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google.com https://static.doubleclick.net https://www.youtube.com https://s.ytimg.com https://cdn.jsdelivr.net https://unpkg.com https://maps.googleapis.com; "
-                "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://www.youtube.com https://cdnjs.cloudflare.com; "
-                "img-src 'self' data: https://avatars.githubusercontent.com https://i.ytimg.com https://yt3.ggpht.com https://www.googletagmanager.com https://www.google.com.au https://www.google-analytics.com https://maps.googleapis.com https://maps.gstatic.com https://khms0.googleapis.com https://khms1.googleapis.com; "
-                "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; "
-                "connect-src 'self' https://www.googletagmanager.com https://www.google.com https://www.google.com.au https://www.google-analytics.com https://www.youtube.com https://play.google.com https://api.hamer.cloud https://api.github.com https://maps.googleapis.com https://raw.githubusercontent.com https://*.azurewebsites.net; "
-                "frame-src https://www.youtube.com https://cdn.jsdelivr.net; "
-                "object-src 'none'; "
-                "form-action 'self'; "
-                "frame-ancestors 'none'; "
-                "upgrade-insecure-requests"
-            )},
             {'key': 'strict-transport-security', 'value': 'max-age=63072000; includeSubdomains; preload'},
             {'key': 'x-content-type-options', 'value': 'nosniff'},
-            {'key': 'x-xss-protection', 'value': '1; mode=block'},
+            {'key': 'x-frame-options', 'value': 'SAMEORIGIN'},
             {'key': 'referrer-policy', 'value': 'strict-origin-when-cross-origin'},
             {'key': 'permissions-policy', 'value': (
                 "accelerometer=(), "
@@ -49,26 +21,22 @@ def lambda_handler(event, context):
                 "microphone=(), "
                 "camera=(), "
                 "fullscreen=(self), "
-                "payment=(), "
-                "interest-cohort=(), "
-                "usb=(), "
-                "magnetometer=(), "
-                "gyroscope=()"
+                "payment=()"
+            )},
+            {'key': 'content-security-policy', 'value': (
+                "default-src 'self'; "
+                "script-src 'self' 'unsafe-inline'; "
+                "style-src 'self' 'unsafe-inline'; "
+                "img-src 'self' data:; "
+                "font-src 'self'; "
+                "frame-ancestors 'self'; "
+                "upgrade-insecure-requests"
             )},
         ]
         for header in security_headers:
             key = header['key'].lower()
             value = header['value']
-            if key in response_headers:
-                response_headers[key].append({'key': key, 'value': value})
-            else:
-                response_headers[key] = [{'key': key, 'value': value}]
-        
-        # Add charset encoding header if content-type exists
-        if 'content-type' in response_headers:
-            content_type_value = response_headers['content-type'][0]['value']
-            if 'text/html' in content_type_value and 'charset=' not in content_type_value:
-                response_headers['content-type'][0]['value'] = content_type_value + '; charset=utf-8'
+            response_headers[key] = [{'key': key, 'value': value}]
 
         if response:
             return response
@@ -80,7 +48,7 @@ def lambda_handler(event, context):
         return {
             'status': '500',
             'statusDescription': 'Internal Server Error',
-            'body': json.dumps({'message': f"Error in lambda_handler: {str(e)}"}),
+            'body': json.dumps({'message': f"Error: {str(e)}"}),
             'headers': {
                 'content-type': [{'key': 'content-type', 'value': 'application/json'}],
             },

@@ -1,18 +1,12 @@
 resource "aws_s3_bucket" "root" {
   bucket        = lower(var.domain_name)
   tags          = var.tags
-  force_destroy = true
-  lifecycle {
-    prevent_destroy = false
-  }
+  force_destroy = false
 }
 
 resource "aws_s3_bucket" "www" {
   bucket        = lower("www.${var.domain_name}")
-  force_destroy = true
-  lifecycle {
-    prevent_destroy = false
-  }
+  force_destroy = false
 
   dynamic "logging" {
     for_each = length(keys(var.logging)) == 0 ? [] : [var.logging]
@@ -30,22 +24,26 @@ resource "aws_s3_bucket_policy" "cloudfrontpolicy" {
 
   policy = jsonencode({
     Version = "2012-10-17"
-    Id      = "AllowCloudfrontOAI"
+    Id      = "AllowCloudfrontOAC"
     Statement = [
       {
-        Sid    = "AllowCloudfrontOAI"
+        Sid    = "AllowCloudfrontOAC"
         Effect = "Allow"
         "Principal" : {
-          "AWS" : aws_cloudfront_origin_access_identity.origin_access_identity.iam_arn
+          "Service" : "cloudfront.amazonaws.com"
         }
         Action = "s3:GetObject"
         Resource = [
-          aws_s3_bucket.www.arn,
           "${aws_s3_bucket.www.arn}/*",
         ]
+        Condition = {
+          StringEquals = {
+            "AWS:SourceArn" = aws_cloudfront_distribution.s3_distribution.arn
+          }
+        }
       },
       {
-        "Sid" : "allow account access",
+        "Sid" : "AllowDeployUser",
         "Effect" : "Allow",
         "Principal" : {
           "AWS" : aws_iam_user.website-user.arn
@@ -69,34 +67,27 @@ resource "aws_s3_bucket_policy" "cloudfrontpolicy" {
 resource "aws_s3_bucket_public_access_block" "public_access" {
   bucket = aws_s3_bucket.www.id
 
-  block_public_acls       = var.block_public_acls
-  block_public_policy     = var.block_public_policy
-  ignore_public_acls      = var.ignore_public_acls
-  restrict_public_buckets = var.restrict_public_buckets
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
 resource "aws_s3_bucket" "log_bucket" {
   count         = var.create_logging_bucket ? 1 : 0
   bucket        = lower("${var.domain_name}-logging")
-  force_destroy = true
-  lifecycle {
-    prevent_destroy = false
-  }
-  tags = var.tags
+  force_destroy = false
+  tags          = var.tags
 }
 
 resource "aws_s3_bucket_ownership_controls" "application_logs" {
+  count  = var.create_logging_bucket ? 1 : 0
   bucket = aws_s3_bucket.log_bucket[0].id
 
   rule {
     object_ownership = "ObjectWriter"
   }
 }
-
-# resource "aws_s3_bucket_acl" "log" {
-#   bucket = aws_s3_bucket.log_bucket[0].id
-#   acl    = "log-delivery-write"
-# }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "root" {
   bucket = aws_s3_bucket.root.bucket
@@ -117,6 +108,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "www" {
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "log" {
+  count  = var.create_logging_bucket ? 1 : 0
   bucket = aws_s3_bucket.log_bucket[0].bucket
   rule {
     apply_server_side_encryption_by_default {
