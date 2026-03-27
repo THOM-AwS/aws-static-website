@@ -12,6 +12,6 @@ resource "aws_lambda_function" "cloudfront_lambda" {
   handler          = "secheader.lambda_handler"
   publish          = true
   source_code_hash = data.archive_file.secheader_zip.output_base64sha256
-  runtime          = "python3.12"
+  runtime          = "python3.11"
   tags             = var.tags
 }
