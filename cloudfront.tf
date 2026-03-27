@@ -96,6 +96,16 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   tags                = var.tags
 }
 
+# Keep OAI resource temporarily — CloudFront takes time to fully
+# release the OAI reference after migrating to OAC. Will be removed
+# in a future version once all distributions have fully migrated.
+resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
+  comment = "access-identity-${var.domain_name}.s3.amazonaws.com"
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
 data "aws_cloudfront_origin_request_policy" "this" {
   name = "Managed-CORS-S3Origin"
 }
