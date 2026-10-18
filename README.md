@@ -48,3 +48,20 @@ locals {
   workspace = local.env[terraform.workspace]
 }
 ```
+
+## Clean URLs, www redirect and a real 404 page (v1.2.0)
+
+Two optional inputs, both off by default so existing sites keep their behaviour:
+
+```
+module "aws-static-website" {
+  source                  = "github.com/THOM-AwS/aws-static-website?ref=v1.2.0"
+  domain_name             = "example.com"
+  viewer_request_function = true      # 301 www.example.com -> example.com, /page -> /page.html, /dir/ -> /dir/index.html
+  error_page_path         = "/404.html" # served with HTTP 404 instead of the homepage
+}
+```
+
+The redirect and the rewrite run in a CloudFront Function at viewer-request (`viewer-request.js`),
+so they cost nothing at the origin and need no Lambda@Edge. Upload a `404.html` to the bucket before
+setting `error_page_path`.

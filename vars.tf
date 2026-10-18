@@ -67,3 +67,15 @@ locals {
     },
   )
 }
+
+variable "viewer_request_function" {
+  default     = false
+  type        = bool
+  description = "Attach a CloudFront Function at viewer-request that 301s www.<domain> to the apex and maps extensionless paths to .html objects"
+}
+
+variable "error_page_path" {
+  default     = "/index.html"
+  type        = string
+  description = "Object served with HTTP 404 when the origin returns 403 for a missing key. Set to a real 404 page to stop serving the homepage with a 404 status"
+}
