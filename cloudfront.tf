@@ -54,6 +54,14 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       "GET",
       "HEAD",
     ]
+    dynamic "function_association" {
+      for_each = var.viewer_request_function ? [1] : []
+      content {
+        event_type   = "viewer-request"
+        function_arn = aws_cloudfront_function.viewer_request[0].arn
+      }
+    }
+
     origin_request_policy_id = data.aws_cloudfront_origin_request_policy.this.id
     cache_policy_id          = data.aws_cloudfront_cache_policy.this.id
     target_origin_id         = "www.${var.domain_name}-origin"
@@ -89,11 +97,11 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     error_code            = 403
     response_code         = 404
     error_caching_min_ttl = 0
-    response_page_path    = "/index.html"
+    response_page_path    = var.error_page_path
   }
 
   wait_for_deployment = true
-  tags                = var.tags
+  tags                = merge(var.tags, var.environment == null ? {} : { Environment = var.environment })
 }
 
 # Keep OAI resource temporarily — CloudFront takes time to fully
