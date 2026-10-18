@@ -10,11 +10,13 @@ variable "create_logging_bucket" {
 }
 
 variable "acm_certificate_domain" {
+  type        = string
   default     = null
   description = "Domain of the ACM certificate (defaults to hosted_zone)"
 }
 
 variable "hosted_zone" {
+  type        = string
   default     = null
   description = "Route53 hosted zone"
 }
@@ -37,11 +39,13 @@ variable "tags" {
 }
 
 variable "price_class" {
+  type        = string
   default     = "PriceClass_All"
   description = "CloudFront distribution price class"
 }
 
 variable "use_default_domain" {
+  type        = bool
   default     = false
   description = "Use CloudFront website address without Route53 and ACM certificate"
 }
@@ -58,15 +62,6 @@ variable "security_headers_source" {
   description = "Path to a custom secheader.py file. If null, uses the module default."
 }
 
-locals {
-  tags = merge(
-    var.tags,
-    {
-      Name        = var.domain_name
-      Environment = var.environment
-    },
-  )
-}
 
 variable "viewer_request_function" {
   default     = false

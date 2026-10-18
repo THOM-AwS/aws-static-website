@@ -13,7 +13,7 @@ resource "aws_s3_bucket" "www" {
 
     content {
       target_bucket = logging.value.target_bucket
-      target_prefix = lookup(logging.value, "target_prefix")
+      target_prefix = logging.value["target_prefix"]
     }
   }
   tags = var.tags
