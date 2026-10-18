@@ -101,7 +101,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   wait_for_deployment = true
-  tags                = var.tags
+  tags                = merge(var.tags, var.environment == null ? {} : { Environment = var.environment })
 }
 
 # Keep OAI resource temporarily — CloudFront takes time to fully
