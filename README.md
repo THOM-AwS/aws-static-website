@@ -92,15 +92,31 @@ module's own `provider` block.
 3. **Pass `hosted_zone_id` and `certificate_arn`** instead of `hosted_zone` and
    `acm_certificate_domain`. `use_default_domain`, `use_sec_headers`,
    `security_headers_source`, `viewer_request_function` and `logging` are gone.
-4. **Expect the Lambda@Edge delete to fail once.** The distribution update
-   (headers policy in, Lambda association out) applies first. CloudFront then
-   keeps the function's replicas for up to several hours, so the Lambda delete
-   can fail with "replicated function". That run leaves the Lambda, its role
-   and possibly the IAM user half removed; a plain re-apply a few hours later
-   finishes it. The site serves the new headers from the first apply.
+4. **Detach the Lambda@Edge before deleting it.** Terraform deletes the
+   function before it updates the distribution, and CloudFront refuses to
+   delete a function that is still attached ("replicated function"), so a
+   plain upgrade fails and re-applying never gets past it. In the same change
+   as the upgrade, move the function and its role into your root module and
+   hold them there:
+
+   ```hcl
+   moved {
+     from = module.site.aws_lambda_function.cloudfront_lambda
+     to   = aws_lambda_function.legacy_sec_headers
+   }
+   moved {
+     from = module.site.aws_iam_role.iam_for_lambda
+     to   = aws_iam_role.legacy_sec_headers
+   }
+   # plus both resources, matching v1, with lifecycle { ignore_changes = all }
+   ```
+
+   The distribution then switches to the headers policy. A few hours later,
+   once CloudFront has cleared the replicas, remove both resources in a second
+   apply.
 5. Plan changes to expect: in-place updates to the distribution (headers
    policy, HTTP/3, compression) and the bucket policy; new versioning,
    lifecycle, public access block and AAAA records (apply fails if you
    already have hand-made AAAA records for the apex or www); destroys of the IAM user,
-   key and policy, the Lambda@Edge function and role, and the OAI. The A
+   key and policy, and the OAI (the Lambda@Edge function and role go in the second apply). The A
    records move to `aws_route53_record.alias[...]` without replacement.
