@@ -34,3 +34,5 @@ override.tf.json
 terraform.rc
 
 .DS_Store
+# example provider lock
+examples/**/.terraform.lock.hcl
